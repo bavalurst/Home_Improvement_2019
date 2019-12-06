@@ -4,14 +4,17 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <string.h>
-#define PORT 8080
+#include <iostream>
+#define PORT 3000
+
+using namespace std;
 
 int main(int argc, char const *argv[])
 {
     int sock = 0, valread;
     struct sockaddr_in serv_addr;
     char *hello = "1";
-    char buffer[1024] = {0};
+    char buffer[4] = {0};
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
         printf("\n Socket creation error \n");
@@ -22,7 +25,7 @@ int main(int argc, char const *argv[])
     serv_addr.sin_port = htons(PORT);
 
     // Convert IPv4 and IPv6 addresses from text to binary form
-    if(inet_pton(AF_INET, "192.168.178.43", &serv_addr.sin_addr)<=0)
+    if(inet_pton(AF_INET, "10.42.0.178", &serv_addr.sin_addr)<=0)
     {
         printf("\nInvalid address/ Address not supported \n");
         return -1;
@@ -39,8 +42,13 @@ int main(int argc, char const *argv[])
 
 	while(1)
 	{
-		usleep(10000);
 		valread = read( sock , buffer, 4);
-		printf("%s\n",buffer);
+
+		for(int i = 0; i < valread; i++)
+		{
+			cout << buffer[i];
+		}
+
+		cout << " " << endl;
 	}
 }

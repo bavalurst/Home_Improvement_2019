@@ -3,8 +3,8 @@
 #define PORT 3000 
 
 // Network SSID
-const char* ssid = "RASP";
-const char* password = "roottoor";
+const char* ssid = "Wij gebruiken een IDE";
+const char* password = "Mijnarends";
 
 WiFiServer wifiServer(PORT);
 
@@ -16,7 +16,7 @@ void rotaryEncoder();
 char c;
 String h = "";
 
-char buffer0[4];
+char buffer0[4] = {0};
 
 unsigned int anin0 = 0;
 unsigned int anin1 = 0;
@@ -68,9 +68,6 @@ void rotaryEncoder()
   anin1 = anin1|Wire.read(); 
   Serial.print("analog in 0: ");
   Serial.println(anin0);   
-  Serial.print("analog in 1: ");
-  Serial.println(anin1);   
-  Serial.println("");
 
   itoa(anin0, buffer0, 10);
 }
@@ -91,7 +88,6 @@ void checkClient()
       delay(100);
       rotaryEncoder();
       client.write(buffer0);
-      //client.write(myStr1);
       delay(10);
     }
  
