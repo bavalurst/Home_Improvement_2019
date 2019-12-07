@@ -1,20 +1,20 @@
-// Client side C/C++ program to demonstrate Socket programming
-#include <stdio.h>
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <string.h>
-#include <iostream>
-#define PORT 3000
+/*
+ * Socket.cpp
+ *
+ *  Created on: 7 dec. 2019
+ *      Author: jordy
+ */
 
-using namespace std;
+#include "Socket.h"
 
-int main(int argc, char const *argv[])
+Socket::Socket(char *ip) : ip_addr(ip) {}
+
+Socket::~Socket() {}
+
+int Socket::connectToClient()
 {
-    int sock = 0, valread;
     struct sockaddr_in serv_addr;
-    char *hello = "1";
-    char buffer[4] = {0};
+
     if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
         printf("\n Socket creation error \n");
@@ -25,7 +25,7 @@ int main(int argc, char const *argv[])
     serv_addr.sin_port = htons(PORT);
 
     // Convert IPv4 and IPv6 addresses from text to binary form
-    if(inet_pton(AF_INET, "10.42.0.178", &serv_addr.sin_addr)<=0)
+    if(inet_pton(AF_INET, ip_addr, &serv_addr.sin_addr)<=0)
     {
         printf("\nInvalid address/ Address not supported \n");
         return -1;
@@ -36,11 +36,17 @@ int main(int argc, char const *argv[])
         printf("\nConnection Failed \n");
         return -1;
     }
+}
 
-	send(sock , hello, strlen(hello) , 0 );
+void Socket::sendMessage()
+{
+    send(sock , hello, strlen(hello) , 0 );
 	printf("Hello message sent\n");
+}
 
-	while(1)
+void Socket::receiveMessage()
+{
+    while(1)
 	{
 		valread = read( sock , buffer, 4);
 
@@ -52,3 +58,8 @@ int main(int argc, char const *argv[])
 		cout << " " << endl;
 	}
 }
+
+
+
+
+
