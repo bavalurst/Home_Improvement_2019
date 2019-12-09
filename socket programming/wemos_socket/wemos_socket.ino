@@ -1,5 +1,6 @@
 #include <Wire.h>
 #include <ESP8266WiFi.h>
+#include <string.h>
 #define PORT 3000 
 
 // Network SSID
@@ -9,17 +10,22 @@ const char* password = "Mijnarends";
 WiFiServer wifiServer(PORT);
 
 void initWiFi();
-void checkClient();
+void connectWithClient();
 void turnOnLed();
 void rotaryEncoder();
 
-char c;
+int c;
 String h = "";
 
 char buffer0[4] = {0};
 
 unsigned int anin0 = 0;
 unsigned int anin1 = 0;
+
+struct Data {
+  int id = 1;
+  int state;
+};
 
 void setup() {
   Wire.begin();
@@ -31,7 +37,7 @@ void setup() {
  
 void loop() {
 
-  checkClient();
+  connectWithClient();
 }
 
 void turnOnLed()
@@ -46,7 +52,7 @@ void turnOnLed()
   // Zet led op basis van ontvangen state van de PI
   Wire.beginTransmission(0x38);
   Wire.write(byte(0x01));
-  Wire.write(byte(c << 4)); // zet led op basis van ontvangen state
+  Wire.write(byte(c - '0' << 4)); // zet led op basis van ontvangen state
   Wire.endTransmission();
 }
 
@@ -72,7 +78,7 @@ void rotaryEncoder()
   itoa(anin0, buffer0, 10);
 }
 
-void checkClient()
+void connectWithClient()
 {
   WiFiClient client = wifiServer.available();
   
@@ -82,10 +88,8 @@ void checkClient()
  
       while (client.available()>0) {
         c = client.read();
-        Serial.print(c);
-        turnOnLed();
       }
-      delay(100);
+      turnOnLed();
       rotaryEncoder();
       client.write(buffer0);
       delay(10);
