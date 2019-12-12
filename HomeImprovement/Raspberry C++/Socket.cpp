@@ -1,18 +1,19 @@
 /*
  * Socket.cpp
  *
- *  Created on: 7 dec. 2019
+ *  Created on: 13 dec. 2019
  *      Author: jordy
  */
 
 #include "Socket.h"
 
-//Socket::Socket(char *ip) : ip_addr(ip) {}
+Socket::Socket() {}
 
 Socket::~Socket() {}
 
-int Socket::connectToServer()
+int Socket::connectToServer(char* ip_addr)
 {
+
 	struct sockaddr_in serv_addr;
 
 	if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
@@ -46,22 +47,19 @@ void Socket::sendMessage()
 
 int Socket::receiveMessage()
 {
-	valread = read( sock , buffer, 4);
+	 valread = read( sock , buffer, 4);
 
-	for(int i = 0; i < valread; i++)
-	{
-		cout << buffer[i];
-	}
+	 for(int i = 0; i < valread; i++)
+	 {
+	 	cout << buffer[i];
+	 }
+
+	return 5;
 }
 
 void Socket::disconnect()
 {
 	shutdown(sock, SHUT_RDWR);
-}
-
-void Socket::setIP(char *ip)
-{
-	ip_addr = ip;
 }
 
 

@@ -1,28 +1,32 @@
+/*
+ * Socket.cpp
+ *
+ *  Created on: 13 dec. 2019
+ *      Author: jordy
+ */
+
 #include "Database.h"
 
-Database::Database(/* args */) {}
-
-Database::Database(int val) :  value(val) {}
+Database::Database(int k) :  key(k) {}
 
 Database::~Database() {}
 
-map<int, Database*> Database::getDatabase()
+int Database::receiveMessage()
 {
-    int i = 6; // fake data, moet van database komen
-
-    data.clear(); // maak map leeg
-   
-    data.insert(make_pair(1, new Database(i))); // new Database entry
-
-    return data;
+    return 6;
 }
 
-int Database::getData()
+void Database::setValue(int val)
+{
+    value = val;
+}
+
+int Database::getValue()
 {
     return value;
 }
 
-void Database::sendData()
+int Database::getKey()
 {
-
+    return key;
 }

@@ -1,7 +1,7 @@
 /*
- * Socket.h
+ * Socket.cpp
  *
- *  Created on: 7 dec. 2019
+ *  Created on: 13 dec. 2019
  *      Author: jordy
  */
 
@@ -16,7 +16,6 @@
 #include <string>
 #include <string.h>
 #include <iostream>
-#include <list>
 
 #define PORT 3000
 
@@ -28,14 +27,12 @@ private:
     int sock = 0;
     int valread = 0;
     int num = 0;
-    char *ip_addr;
     char *data = "7";
     char buffer[4] = {0};
 public:
-    //Socket(char *);
+    Socket();
     ~Socket();
-    int connectToServer();
-    void setIP(char*);
+    int connectToServer(char*);
     void sendMessage();
     void disconnect();
     int receiveMessage();

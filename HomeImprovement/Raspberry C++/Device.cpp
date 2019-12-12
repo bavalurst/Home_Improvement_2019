@@ -1,0 +1,40 @@
+/*
+ * Socket.cpp
+ *
+ *  Created on: 13 dec. 2019
+ *      Author: jordy
+ */
+
+#include "Device.h"
+
+Device::Device(int val, char* ip, Socket* s) :  value(val), ip_addr(ip), s1(s) {}
+
+Device::~Device() {}
+
+char* Device::getIP()
+{
+	return ip_addr;
+}
+
+
+int Device::getKey()
+{
+	return key;
+}
+
+void Device::setValue(int val)
+{
+	value = val;
+}
+
+int Device::getValue()
+{
+	return value;
+}
+
+Socket* Device::getSocket()
+{
+	return s1;
+}
+
+

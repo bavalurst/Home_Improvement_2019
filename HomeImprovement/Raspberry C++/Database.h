@@ -1,3 +1,10 @@
+/*
+ * Socket.cpp
+ *
+ *  Created on: 13 dec. 2019
+ *      Author: jordy
+ */
+
 #ifndef DATABASE_H
 #define DATABASE_H
 
@@ -10,15 +17,16 @@ using namespace std;
 class Database
 {
 private:
-    int value;
-    map<int, Database*> data;
+    int key;
+    int value = 0;
 public:
     Database(/* args */);
     Database(int);
     ~Database();
-    map<int, Database*> getDatabase();
-    int getData();
-    void sendData();
+    int receiveMessage();
+    void setValue(int);
+    int getValue();
+    int getKey();
 };
 
 
