@@ -13,7 +13,7 @@ int main()
 
     while(1)
     {
-    	usleep(50000);						// wait 50ms
+    	usleep(100000);						// wait 100ms
     	c1.compareDatabaseToDevice();		// compare data from Database to Devices
     }
 }

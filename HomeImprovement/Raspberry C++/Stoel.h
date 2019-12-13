@@ -5,21 +5,21 @@
  *      Author: jordy
  */
 
-#ifndef BED_H
-#define BED_H
+#ifndef STOEL_H
+#define STOEL_H
 
 #include "Device.h"
 
 class Socket;
 
-class Bed : public Device
+class Stoel : public Device
 {
 private:
     /* data */
 public:
-    Bed(char*, Socket*);
-    virtual ~Bed();
+    Stoel(char*, Socket*);
+    virtual ~Stoel();
     virtual void logic();
 };
 
-#endif /* BED_H */
+#endif /* STOEL_H */

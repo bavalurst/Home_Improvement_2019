@@ -19,15 +19,13 @@ using namespace std;
 class Device
 {
 private:
-    int key;
     int value = 0;
     char* ip_addr;
     Socket *s1;
 public:
-    Device(int, char*, Socket*);
+    Device(char*, Socket*);
     virtual ~Device();
     virtual char* getIP();
-    virtual int getKey();
     virtual void setValue(int);
     virtual int getValue();
     virtual Socket* getSocket();

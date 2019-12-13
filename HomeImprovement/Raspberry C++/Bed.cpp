@@ -7,7 +7,7 @@
 
 #include "Bed.h" 
 
-Bed::Bed(int i, char* ip, Socket* s) : Device(i, ip, s)
+Bed::Bed(char* ip, Socket* s) : Device(ip, s)
 {
 	
 }
@@ -16,6 +16,7 @@ Bed::~Bed() {}
 
 void Bed::logic()
 {
+	cout << " " << endl;
 	cout << "This is logic bed" << endl;
 }
 

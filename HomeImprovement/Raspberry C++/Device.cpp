@@ -7,19 +7,13 @@
 
 #include "Device.h"
 
-Device::Device(int val, char* ip, Socket* s) :  value(val), ip_addr(ip), s1(s) {}
+Device::Device(char* ip, Socket* s) : ip_addr(ip), s1(s) {}
 
 Device::~Device() {}
 
 char* Device::getIP()
 {
 	return ip_addr;
-}
-
-
-int Device::getKey()
-{
-	return key;
 }
 
 void Device::setValue(int val)
@@ -35,6 +29,11 @@ int Device::getValue()
 Socket* Device::getSocket()
 {
 	return s1;
+}
+
+void Device::logic()
+{
+	cout << "This is logic device" << endl;
 }
 
 

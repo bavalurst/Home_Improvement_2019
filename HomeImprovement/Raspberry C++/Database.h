@@ -17,11 +17,9 @@ using namespace std;
 class Database
 {
 private:
-    int key;
     int value = 0;
 public:
-    Database(/* args */);
-    Database(int);
+    Database();
     ~Database();
     int receiveMessage();
     void setValue(int);

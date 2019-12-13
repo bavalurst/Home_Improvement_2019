@@ -42,7 +42,6 @@ int Socket::connectToServer(char* ip_addr)
 void Socket::sendMessage()
 {
     send(sock , data, strlen(data) , 0 );
-	printf("Hello message sent\n");
 }
 
 int Socket::receiveMessage()
@@ -54,7 +53,9 @@ int Socket::receiveMessage()
 	 	cout << buffer[i];
 	 }
 
-	return 5;
+	 cout << " " << endl;
+
+	 return 5;
 }
 
 void Socket::disconnect()

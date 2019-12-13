@@ -11,11 +11,17 @@ Control::Control()
 {
 	s1 = new Socket();
 
-    Device *bed_dev = new Bed(1, "10.42.0.123", s1);
-    addDevice(bed_dev);
+    Device *bed_dev = new Bed("10.42.0.123", s1);
+    addDevice(1, bed_dev);
 
-    Database *bed_dat = new Database(1);
-    addDatabase(bed_dat);
+    Database *bed_dat = new Database();
+    addDatabase(1, bed_dat);
+
+    Device *stoel_dev = new Stoel("10.42.0.170", s1);
+    addDevice(2, stoel_dev);
+
+    Database *stoel_dat = new Database();
+    addDatabase(2, stoel_dat);
 }
 
 Control::~Control()
@@ -24,14 +30,14 @@ Control::~Control()
 	delete s1;
 }
 
-void Control::addDevice(Device* d1)
+void Control::addDevice(int a, Device* d1)
 {
-    devices.insert(make_pair(d1->getKey(), d1));
+    devices.insert(make_pair(a, d1));
 }
 
-void Control::addDatabase(Database* d2)
+void Control::addDatabase(int b, Database* d2)
 {
-    databases.insert(make_pair(d2->getKey(), d2));
+    databases.insert(make_pair(b, d2));
 }
 
 void Control::getData()
@@ -56,11 +62,10 @@ void Control::compareDatabaseToDevice()
 {
     getData();
 
-    map<int, Device*>::iterator dev = devices.begin();
-
     for (map<int, Database*>::iterator dat = databases.begin(); dat != databases.end(); ++dat)
     {
-        if(!(dat->second->getKey() == dev->second->getKey() && dat->second->getValue() == dev->second->getValue()))  // change key later on
+    	map<int, Device*>::iterator dev = devices.find(dat->first);
+        if(!(dat->second->getValue() == dev->second->getValue()))  // change key later on
         {
             dev->second->logic();
         	s1 = dev->second->getSocket();
@@ -68,7 +73,7 @@ void Control::compareDatabaseToDevice()
             s1->sendMessage();
             s1->disconnect();
         }
-        dev++;
+        usleep(100000);
     }
 }
 

@@ -11,6 +11,7 @@
 #include "Database.h"
 #include "Device.h"
 #include "Bed.h"
+#include "Stoel.h"
 
 class Control
 {
@@ -23,8 +24,8 @@ public:
     ~Control();
     void getData();
     void compareDatabaseToDevice();
-    void addDevice(Device*);
-    void addDatabase(Database*);
+    void addDevice(int, Device*);
+    void addDatabase(int, Database*);
 };
 
 #endif /* CONTROL_H */

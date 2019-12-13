@@ -7,7 +7,7 @@
 
 #include "Database.h"
 
-Database::Database(int k) :  key(k) {}
+Database::Database() {}
 
 Database::~Database() {}
 
@@ -24,9 +24,4 @@ void Database::setValue(int val)
 int Database::getValue()
 {
     return value;
-}
-
-int Database::getKey()
-{
-    return key;
 }
