@@ -37,17 +37,7 @@ void Control::compareDatabaseToDevice()
                 (*act)->setValue();
                 (*dev)->sendMessage();
             }
-        }
-    	
-
-        if(key == dat->readData(key))
-        {
-            cout << "Value id " << (*dev)->getActuator()->getKey() << " : " << (*dev)->getActuator()->getValue() << endl;
-        }else
-        {
-            cout << "Not found" << endl;
-        }
-        
+        }   
         usleep(100000); // wait 100ms to prevent socket failure
     }
 }
