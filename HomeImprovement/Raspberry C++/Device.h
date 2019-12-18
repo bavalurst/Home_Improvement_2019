@@ -35,6 +35,7 @@ public:
     virtual int sendMessage();
     virtual int receiveMessage();
     virtual list<Actuator*> getActuators();
+    virtual void addActuator(Actuator*);
     virtual void logic() = 0;
 };
 

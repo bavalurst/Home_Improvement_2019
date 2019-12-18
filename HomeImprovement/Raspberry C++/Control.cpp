@@ -21,8 +21,7 @@ void Control::addDevice(Device* d1)
 // deze functie gaat ervanuit dat de map van de databases de waarheid is 
 // dit betekent dat als de waardes vergeleken worden, dat de devices aangepast worden op basis van de waardes van de databases
 void Control::compareDatabaseToDevice()
-{
-    
+{   
     // compare the values from the map with databases and the map from devices with each other, and act accordingly
     for (list<Device*>::iterator dev = devices.begin(); dev != devices.end(); ++dev)
     {

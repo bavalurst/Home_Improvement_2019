@@ -1,15 +1,8 @@
 #include "Device.h"
 
-Device::Device(char* ip) : ip_addr(ip) 
-{
-	a1 = new Actuator(1, 0);
-	id.push_back(a1);
-}
+Device::Device(char* ip) : ip_addr(ip) {}
 
-Device::~Device() 
-{
-	delete a1;
-}
+Device::~Device() {}
 
 char* Device::getIP()
 {
@@ -86,6 +79,11 @@ int Device::receiveMessage()
 void Device::logic()
 {
 	cout << "This is logic device" << endl;
+}
+
+void Device::addActuator(Actuator* a)
+{
+	id.push_back(a);
 }
 
 list<Actuator*> Device::getActuators()
