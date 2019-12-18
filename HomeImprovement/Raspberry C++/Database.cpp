@@ -35,5 +35,5 @@ int Database::readData(string key) {
 	// this->refreshData();
 	// return data[key];
 
-	return key;
+	return 1;
 }
