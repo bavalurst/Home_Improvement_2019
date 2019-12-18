@@ -1,34 +1,39 @@
-/*
- * Socket.cpp
- *
- *  Created on: 13 dec. 2019
- *      Author: jordy
- */
-
 #ifndef DEVICE_H
 #define DEVICE_H
 
 #include <iostream>
 #include <map>
 #include <string>
+#include <stdio.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <unistd.h>
+#include <string.h>
+#include <list>
 
-#include "Socket.h"
+#include "Actuator.h"
+
+#define PORT 3000
 
 using namespace std;
 
 class Device
 {
 private:
-    int value = 0;
     char* ip_addr;
-    Socket *s1;
+    int sock = 0;
+    int valread = 0;
+    int num = 0;
+    char *data = "7";
+    char buffer[4] = {0};
+    Actuator *a1;
 public:
-    Device(char*, Socket*);
+    Device(char*);
     virtual ~Device();
     virtual char* getIP();
-    virtual void setValue(int);
-    virtual int getValue();
-    virtual Socket* getSocket();
+    virtual int sendMessage();
+    virtual int receiveMessage();
+    virtual Actuator* getActuator();
     virtual void logic() = 0;
 };
 

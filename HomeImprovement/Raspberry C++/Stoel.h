@@ -1,23 +1,14 @@
-/*
- * Socket.cpp
- *
- *  Created on: 13 dec. 2019
- *      Author: jordy
- */
-
 #ifndef STOEL_H
 #define STOEL_H
 
 #include "Device.h"
-
-class Socket;
 
 class Stoel : public Device
 {
 private:
     /* data */
 public:
-    Stoel(char*, Socket*);
+    Stoel(char*);
     virtual ~Stoel();
     virtual void logic();
 };
