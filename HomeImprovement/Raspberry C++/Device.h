@@ -27,13 +27,14 @@ private:
     char *data = "7";
     char buffer[4] = {0};
     Actuator *a1;
+    list<Actuator*> id;
 public:
     Device(char*);
     virtual ~Device();
     virtual char* getIP();
     virtual int sendMessage();
     virtual int receiveMessage();
-    virtual Actuator* getActuator();
+    virtual list<Actuator*> getActuators();
     virtual void logic() = 0;
 };
 

@@ -6,7 +6,7 @@
 class Bed : public Device
 {
 private:
-    //list<Actuator*> id;
+    
 public:
     Bed(char*);
     virtual ~Bed();

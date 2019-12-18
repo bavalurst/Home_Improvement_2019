@@ -30,7 +30,7 @@ void Database::refreshData() {
 
 }
 
-int Database::readData(int key) {
+int Database::readData(string key) {
 
 	// this->refreshData();
 	// return data[key];

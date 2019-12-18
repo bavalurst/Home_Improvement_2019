@@ -27,7 +27,7 @@ public:
     int receiveMessage();
     void updateData(string, string);
     void refreshData();
-    int readData(int);
+    int readData(string);
 };
 
 

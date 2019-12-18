@@ -22,10 +22,23 @@ void Control::addDevice(Device* d1)
 // dit betekent dat als de waardes vergeleken worden, dat de devices aangepast worden op basis van de waardes van de databases
 void Control::compareDatabaseToDevice()
 {
+    
     // compare the values from the map with databases and the map from devices with each other, and act accordingly
     for (list<Device*>::iterator dev = devices.begin(); dev != devices.end(); ++dev)
     {
-    	int key = (*dev)->getActuator()->getKey();
+        list<Actuator*> a1 = (*dev)->getActuators();
+
+        for(list<Actuator*>::iterator act = a1.begin(); act != a1.end(); ++act)
+        {
+            int key = (*act)->getKey();
+
+            if(!((*act)->getValue() == dat->readData(key)))
+            {
+                (*act)->setValue();
+                (*dev)->sendMessage();
+            }
+        }
+    	
 
         if(key == dat->readData(key))
         {

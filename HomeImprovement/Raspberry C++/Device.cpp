@@ -3,6 +3,7 @@
 Device::Device(char* ip) : ip_addr(ip) 
 {
 	a1 = new Actuator(1, 0);
+	id.push_back(a1);
 }
 
 Device::~Device() 
@@ -87,9 +88,9 @@ void Device::logic()
 	cout << "This is logic device" << endl;
 }
 
-Actuator* Device::getActuator()
+list<Actuator*> Device::getActuators()
 {
-	return a1;
+	return id;
 }
 
 
