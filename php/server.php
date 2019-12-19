@@ -20,11 +20,6 @@
   $msg = socket_read($accept, 1024) or die("Could not read input\n");
 
 
-//write to file
-//   $file = "test.txt";
-//   $current = file_get_contents($file);
-//   $current .= $msg."\n";
-//   file_put_contents($file, $current);
 
 //$file = "results.json";
 $jsonString = file_get_contents('results.json');  // file openen
@@ -34,13 +29,7 @@ $msg2 = explode(',', $msg);                       // bericht ui client splitten 
 $ID = $msg2[0];                                   // eerste deel is ID
 $Value = $msg2[1];                                // tweede deel is de aan te passen waarde
 
-foreach($data as $key => $entry){
-  if($entry['ID'] == $ID){                        // zoek ID en pas waarde aan
-    $data[$key]['Value'] = $Value;
-  }
-}
-
-// array_push($tempArray, $msg3);
+$data[$ID] = $Value;
 
 $newJsonString = json_encode($data);
 file_put_contents('results.json', $newJsonString);
