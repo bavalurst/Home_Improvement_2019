@@ -30,14 +30,15 @@ void Control::compareDatabaseToDevice()
         for(list<Actuator*>::iterator act = a1.begin(); act != a1.end(); ++act)
         {
             string key = (*act)->getKey();
+            string value = dat->readData(key);
 
             if(!((*act)->getValue() == dat->readData(key)))
             {
-                (*act)->setValue(dat->readData(key));
-                (*dev)->sendMessage(dat->readData(key));
+                (*act)->setValue(value);
+                (*dev)->sendMessage(value);
             }
+            usleep(50000); // wait 100ms to prevent socket failure
         }   
-        usleep(100000); // wait 100ms to prevent socket failure
     }
 }
 

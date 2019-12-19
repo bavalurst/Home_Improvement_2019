@@ -39,7 +39,9 @@ int Device::sendMessage(string str)
 
 	send(sock , data, strlen(data) , 0 );
 
+	usleep(50000);
 
+	shutdown(sock, SHUT_RDWR);
 }
 
 int Device::receiveMessage()
@@ -69,6 +71,10 @@ int Device::receiveMessage()
 	}
 
 	valread = read( sock , buffer, 4);
+	
+	usleep(50000);
+
+	shutdown(sock, SHUT_RDWR);
 
 	for(int i = 0; i < valread; i++)
 	{
