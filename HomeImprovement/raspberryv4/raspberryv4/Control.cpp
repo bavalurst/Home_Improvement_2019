@@ -44,6 +44,14 @@ void Control::compareDatabaseToDevice()
         {
         	string key = (*sens)->getKey();
         	string buffer = (*dev)->receiveMessage();
+        	vector<string> result;
+        	result = parseMessage(buffer);
+
+        	for(int i=0; i < result.size(); i+=2) {
+
+        		  cout << " key: "  << result[i] << " value : " << result[i + 1] << endl;
+
+        	  }
 
         	string ID;
         	string Value;
@@ -76,6 +84,50 @@ void Control::compareDatabaseToDevice()
         	}
         }
     }
+}
+
+vector<string> Control::parseMessage(string message)
+{
+
+  vector<string> stringlist;
+
+  string result;
+  string result2;
+  string temp;
+
+
+  int i;
+
+  for (i=0; i != sizeof(message); i++)   {
+
+
+    if (!(message[i] == ';' || message[i] == ':'))
+    temp += message[i];
+
+    else {
+        stringlist.push_back(temp);
+        temp = "";
+    }
+
+
+    }
+  /*string stringarray[stringlist.size()];
+  int f = 0;
+
+  //cout << stringlist.size();
+
+  std::list<string>::iterator it;
+  for(it = stringlist.begin(); it != stringlist.end(); ++it) {
+
+      stringarray[f] = it->c_str();
+      f++;
+      //cout << it->c_str() << endl;*/
+
+
+
+	return stringlist;
+
+
 }
 
 
