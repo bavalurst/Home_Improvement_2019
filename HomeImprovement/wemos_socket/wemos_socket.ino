@@ -12,12 +12,15 @@ WiFiServer wifiServer(PORT);
 void initWiFi();
 void connectWithClient();
 void turnOnLed();
+void readLed();
 void rotaryEncoder();
 
 int c;
 String h = "";
 
-char buffer0[4] = {0};
+char buffer0[10] = {0};
+char buffer1[10] = {0};
+char buffer2[20] = {0};
 
 unsigned int anin0 = 0;
 unsigned int anin1 = 0;
@@ -38,6 +41,19 @@ void setup() {
 void loop() {
 
   connectWithClient();
+  readLed();
+}
+
+void readLed()
+{
+  Wire.beginTransmission(0x38); 
+  Wire.write(byte(0x00));      
+  Wire.endTransmission();
+  Wire.requestFrom(0x38, 1);   
+  unsigned int inputs = Wire.read();  
+  Serial.print("Digital in: ");
+  Serial.println(inputs&0x0F);
+  itoa(inputs, buffer1, 10);
 }
 
 void turnOnLed()
@@ -74,7 +90,6 @@ void rotaryEncoder()
   anin1 = anin1|Wire.read(); 
   Serial.print("analog in 0: ");
   Serial.println(anin0);   
-
   itoa(anin0, buffer0, 10);
 }
 
@@ -91,7 +106,23 @@ void connectWithClient()
       }
       turnOnLed();
       rotaryEncoder();
-      client.write(buffer0);
+        int n = 10, m = 10, countA=0,countB=0;
+
+      for (int i = 0; i<m+n; i++)
+      {
+          if (countA < m)
+          {
+              buffer2[i] = buffer0[countA];
+              countA++;
+          }
+          else
+          {
+              buffer2[i] = buffer1[countB];
+              countB++;
+          }
+    }
+      client.write(buffer2);
+      
       delay(10);
     }
  
