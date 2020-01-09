@@ -1,38 +1,18 @@
-/*
- * main.cpp test
- *
- *  Created on: Nov 18, 2019
- *      Author: programmer
- */
-#include <unistd.h>
-#include <iostream>
 #include <iomanip>
 #include <fstream>
 #include <streambuf>
+#include <jsoncpp/json/json.h>
+#include <jsoncpp/json/reader.h>
+#include "Control.h"
 
-#include "json.h"
-#include "reader.h"
-#include "Controller.h"
-using namespace Json;
-using namespace std;
+int main()
+{
+    Control c1;
 
-int main () {
-	Controller controller;
-
-	cout << "old data:" << endl;
-    controller.readAllData();
-
-    cout << endl;
-
-    controller.updateData("fruit", "Bananas");
-
-    cout << "new data: " <<endl;
-
-    controller.readAllData();
-
-
-	return 1;
-
+    while(1)
+    {
+    	usleep(100000);						// wait 100ms to prevent socket failure
+    	c1.compareDatabaseToDevice();		// compare data from Database to Devices (from website to database)
+    	//c1.getDataFromWmos(); 			// loop for reading data and putting it in json (from wmos to database)
+    }
 }
-
-
