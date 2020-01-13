@@ -2,6 +2,7 @@
 #include <ESP8266WiFi.h>
 #include <string.h>
 #define PORT 3000 
+#include <cstring>
 
 // Network SSID
 const char* ssid = "Wij gebruiken een IDE";
@@ -12,12 +13,18 @@ WiFiServer wifiServer(PORT);
 void initWiFi();
 void connectWithClient();
 void turnOnLed();
+void readLed();
 void rotaryEncoder();
 
 int c;
 String h = "";
 
-char buffer0[4] = {0};
+char buffer1[10] = {0};
+char buffer2[20] = {0};
+
+String stringbuffer0;
+String stringbuffer1;
+String stringbuffer2;
 
 unsigned int anin0 = 0;
 unsigned int anin1 = 0;
@@ -38,6 +45,26 @@ void setup() {
 void loop() {
 
   connectWithClient();
+  readLed();
+}
+
+void readLed()
+{
+  Wire.beginTransmission(0x38); 
+  Wire.write(byte(0x00));      
+  Wire.endTransmission();
+  Wire.requestFrom(0x38, 1);   
+  unsigned int inputs = Wire.read();  
+  if (inputs % 2 == 0){
+     inputs = 0;
+  }
+  else {
+    inputs = 1;
+  }
+  //Serial.print("Digital in: ");
+  //Serial.println(inputs&0x0F);
+  //Serial.println(inputs);
+  itoa(inputs, buffer1, 10);
 }
 
 void turnOnLed()
@@ -53,6 +80,8 @@ void turnOnLed()
   Wire.beginTransmission(0x38);
   Wire.write(byte(0x01));
   Wire.write(byte(c - '0' << 4)); // zet led op basis van ontvangen state
+  Serial.print("Waarde lampje: ");
+  Serial.println(c - '0');
   Wire.endTransmission();
 }
 
@@ -74,8 +103,7 @@ void rotaryEncoder()
   anin1 = anin1|Wire.read(); 
   Serial.print("analog in 0: ");
   Serial.println(anin0);   
-
-  itoa(anin0, buffer0, 10);
+  itoa(anin0, buffer2, 10);
 }
 
 void connectWithClient()
@@ -89,16 +117,27 @@ void connectWithClient()
       while (client.available()>0) {
         c = client.read();
       }
+      
       turnOnLed();
+      readLed();
       rotaryEncoder();
-      client.write(buffer0);
-      delay(10);
+
+      String a = "2";
+      String b = "3";
+      String c = ":";
+      stringbuffer1 = buffer1;
+      stringbuffer2 = buffer2;
+      stringbuffer0 = a + c + stringbuffer1 + c + b + c + stringbuffer2 + c;
+
+      char writebuffer[50];
+      strcpy(writebuffer, stringbuffer0.c_str());
+      client.write(writebuffer);
+      client.stop();
+      delay(50);
     }
- 
-    client.stop();
     Serial.println(" ");
-    Serial.println("Client disconnected");
-  }
+    //Serial.println("Client disconnected");
+ }
 }
 
 void initWiFi()
