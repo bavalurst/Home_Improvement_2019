@@ -28,7 +28,7 @@ private:
     int num = 0;
     const char *data;;
     char buffer[25] = {0};
-    list<Actuator*> actuatorId;
+    map<string, Actuator*> actuatorId;
     map<string, Sensor*> sensorId;
 //    Actuator *a1;
 public:
@@ -37,11 +37,11 @@ public:
     virtual char* getIP();
     virtual int sendMessage(string);
     virtual string receiveMessage();
-    virtual list<Actuator*> getActuators();
+    virtual map<string, Actuator*> getActuators();
     virtual map<string, Sensor*> getSensors();
-    virtual void addActuator(Actuator*);
+    virtual void addActuator(string, Actuator*);
     virtual void addSensor(Sensor*);
-    virtual void logic() = 0;
+    virtual string logic(map<string, Device*>) = 0;
 };
 
 #endif /* Device_H */

@@ -8,10 +8,11 @@ class Bed : public Device
 private:
 	Actuator* a1;
 	Sensor* s1;
+	Sensor* s2;
 public:
     Bed(char*);
     virtual ~Bed();
-    virtual void logic();
+    virtual string logic(map<string, Device*>);
 };
 
 #endif /* BED_H */

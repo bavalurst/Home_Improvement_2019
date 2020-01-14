@@ -13,7 +13,7 @@ private:
 public:
     Schemerlamp(char*);
     virtual ~Schemerlamp();
-    virtual void logic();
+    virtual string logic(map<string, Device*>);
 };
 
 #endif /* SCHEMERLAMP_H */

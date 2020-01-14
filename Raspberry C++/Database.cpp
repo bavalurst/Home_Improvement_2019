@@ -44,5 +44,16 @@ string Database::readActuatorData(string key) {
 	this->refreshActuatorData();
 	string banaan = actuator[key].asString();
 	return banaan;
+}
+
+void Database::writeActuatorData(string key, string value)  {
+
+	this->refreshActuatorData();
+	actuator[key] = value;
+	ofstream Out("/home/pi/actuator.json");
+		//write new values to file
+	writer.write(Out, actuator);
+	Out.close();
+
 
 }

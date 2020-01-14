@@ -86,14 +86,15 @@ string Device::receiveMessage()
 	return appel;
 }
 
-void Device::logic()
+string Device::logic(map<string, Device*> dev)
 {
-	cout << "This is logic device" << endl;
+
+	return "0";
 }
 
-void Device::addActuator(Actuator* a)
+void Device::addActuator(string key, Actuator* a)
 {
-	actuatorId.push_back(a);
+	actuatorId.insert(make_pair(key, a));
 }
 
 void Device::addSensor(Sensor* s){
@@ -107,7 +108,7 @@ map<string, Sensor*> Device::getSensors(){
 
 }
 
-list<Actuator*> Device::getActuators()
+map<string, Actuator*> Device::getActuators()
 {
 	return actuatorId;
 }

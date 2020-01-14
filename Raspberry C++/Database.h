@@ -29,6 +29,7 @@ public:
     void refreshSensorData();
     void refreshActuatorData();
     string readActuatorData(string);
+    void writeActuatorData(string, string);
 };
 
 

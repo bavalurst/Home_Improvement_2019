@@ -13,7 +13,7 @@ private:
 public:
     Stoel(char*);
     virtual ~Stoel();
-    virtual void logic();
+    virtual string logic(map<string, Device*>);
 };
 
 #endif /* STOEL_H */

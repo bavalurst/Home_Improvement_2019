@@ -13,7 +13,7 @@ private:
 public:
     Fridge(char*);
     virtual ~Fridge();
-    virtual void logic();
+    virtual string logic(map<string, Device*>);
 };
 
 #endif /* FRIDGE_H */

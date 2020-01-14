@@ -13,7 +13,7 @@ private:
 public:
     Zuil(char*);
     virtual ~Zuil();
-    virtual void logic();
+    virtual string logic(map<string, Device*>);
 };
 
 #endif /* ZUIL_H */

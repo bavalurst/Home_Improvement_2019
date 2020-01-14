@@ -4,8 +4,8 @@ Control::Control()
 {
     dat = new Database();                     // create new database object
 
-    Device *bed = new Bed("10.42.0.170");           // create new device
-    addDevice(bed);
+    Device *bed = new Bed("10.42.0.20");           // create new device
+    addDevice("Bed", bed);
 
     //Device *stoel = new Stoel("10.42.0.10");
     //addDevice(stoel);// add device to map for devices
@@ -25,37 +25,36 @@ Control::~Control()
     delete dat;
 }
 
-void Control::addDevice(Device* d1)
+void Control::addDevice(string key, Device* d1)
 {
-    devices.push_back(d1);
+    devices.insert(make_pair(key, d1));
 }
 
 
 void Control::compareDatabaseToDevice()
 {   
     // compare the values from the map with databases and the map from devices with each other, and act accordingly
-    for (list<Device*>::iterator dev = devices.begin(); dev != devices.end(); ++dev)
+    for (map<string, Device*>::iterator dev = devices.begin(); dev != devices.end(); ++dev)
     {
-        list<Actuator*> a1 = (*dev)->getActuators();
+        map<string, Actuator*> a1 = dev->second->getActuators();
         map<string, Sensor*> sensors;
         map<string, Sensor*>::iterator it;
-        sensors = (*dev)->getSensors();
+        sensors = dev->second->getSensors();
 
-        for(list<Actuator*>::iterator act = a1.begin(); act != a1.end(); ++act)
+        for(map<string, Actuator*>::iterator act = a1.begin(); act != a1.end(); ++act)
         {
-            string key = (*act)->getKey();
+            string key = act->first;
 
-            if(!((*act)->getValue() == dat->readActuatorData(key)))
+            if(!(act->second->getValue() == dat->readActuatorData(key)))
             {
-            	(*act)->setValue(dat->readActuatorData(key));
-                (*dev)->sendMessage(dat->readActuatorData(key));
+            	act->second->setValue(dat->readActuatorData(key));
+                dev->second->sendMessage(dat->readActuatorData(key));
             }
         }
 
         usleep(100000); // wait 100ms to prevent socket failure
 
-
-        string buffer = (*dev)->receiveMessage();
+        string buffer = dev->second->receiveMessage();
         vector<string> result;
         result = parseMessage(buffer);
 
@@ -70,7 +69,17 @@ void Control::compareDatabaseToDevice()
         		}
             }
 
-        (*dev)->logic();
+        string SaveThis = dev->second->logic(devices);
+        if(SaveThis != "") {
+        	vector<string> stringresult;
+        	stringresult = parseMessage(SaveThis);
+        	for(int i=0; i < stringresult.size(); i+=2) {
+        		cout << "Writing to: " << stringresult[i];
+        		cout << " with value: " << stringresult[i+1] << endl;
+        		dat->writeActuatorData(stringresult[i], stringresult[i+1]);
+        	}
+
+        }
 
      }
 }
@@ -78,16 +87,13 @@ void Control::compareDatabaseToDevice()
 
 vector<string> Control::parseMessage(string message)
 {
-
   vector<string> stringlist;
   string result;
   string result2;
   string temp;
 
-
   int i;
-
-  for (i=0; i != sizeof(message); i++)   {
+  for (i=0; i != message.size(); i++)   {
 
     if (!(message[i] == ';' || message[i] == ':'))
     temp += message[i];
@@ -99,6 +105,7 @@ vector<string> Control::parseMessage(string message)
 
     }
 
+    if (result[5] == '\0') { cout << "BINGO: " << result[5] << endl;}
 	return stringlist;
 
 }

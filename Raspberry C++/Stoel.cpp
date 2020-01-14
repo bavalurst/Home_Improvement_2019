@@ -3,7 +3,7 @@
 Stoel::Stoel(char* ip) : Device(ip) {
 
 	a1 = new Actuator("4", "0");
-	addActuator(a1);
+	addActuator("4", a1);
 	s1 = new Sensor("5", "0");
 	addSensor(s1);
 	s1 = new Sensor("6", "0");
@@ -18,7 +18,7 @@ Stoel::~Stoel() {
 
 }
 
-void Stoel::logic()
+string Stoel::logic(map<string, Device*> dev)
 {
 	cout << "This is logic stoel" << endl;
 	cout << " " << endl;

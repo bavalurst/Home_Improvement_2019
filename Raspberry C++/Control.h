@@ -18,13 +18,13 @@ class Control
 {
 private:
     Database *dat;
-    list<Device*> devices;
+    map<string, Device*> devices;
 public:
     Control(/* args */);
     ~Control();
     void compareDatabaseToDevice();
     vector<string> parseMessage(string);
-    void addDevice(Device*);
+    void addDevice(string, Device*);
 };
 
 #endif /* CONTROL_H */
