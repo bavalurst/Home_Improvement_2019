@@ -12,11 +12,11 @@ WiFiServer wifiServer(PORT);
 
 void initWiFi();
 void connectWithClient();
-void turnOnLed();
-void readLed();
-void rotaryEncoder();
+void turnOnActuators();
+void readDigitalSensors();
+void readAnalogSensors();
 
-int c;
+int c = 0;
 String h = "";
 
 char buffer1[10] = {0};
@@ -45,10 +45,9 @@ void setup() {
 void loop() {
 
   connectWithClient();
-  readLed();
 }
 
-void readLed()
+void readDigitalSensors()
 {
   Wire.beginTransmission(0x38); 
   Wire.write(byte(0x00));      
@@ -67,7 +66,7 @@ void readLed()
   itoa(inputs, buffer1, 10);
 }
 
-void turnOnLed()
+void turnOnActuators()
 {
   
   // Begin transmissie met leds
@@ -85,7 +84,7 @@ void turnOnLed()
   Wire.endTransmission();
 }
 
-void rotaryEncoder()
+void readAnalogSensors()
 {
    //Inside loop for debugging purpose (hot plugging wemos module into i/o board). 
   Wire.beginTransmission(0x36);
@@ -116,15 +115,16 @@ void connectWithClient()
  
       while (client.available()>0) {
         c = client.read();
+        Serial.print(c);
+        turnOnLed();
       }
-      
-      turnOnLed();
-      readLed();
-      rotaryEncoder();
+  
+      readDigitalSensors();
+      readAnalogSensors();
 
       String a = "2";
       String b = "3";
-      String c = ":";
+      String c = ";";
       stringbuffer1 = buffer1;
       stringbuffer2 = buffer2;
       stringbuffer0 = a + c + stringbuffer1 + c + b + c + stringbuffer2 + c;
@@ -132,11 +132,11 @@ void connectWithClient()
       char writebuffer[50];
       strcpy(writebuffer, stringbuffer0.c_str());
       client.write(writebuffer);
-      client.stop();
-      delay(50);
+      delay(10);
     }
+    client.stop();
     Serial.println(" ");
-    //Serial.println("Client disconnected");
+    Serial.println("Client disconnected");
  }
 }
 

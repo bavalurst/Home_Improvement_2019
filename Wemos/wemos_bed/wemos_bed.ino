@@ -13,8 +13,8 @@ WiFiServer wifiServer(PORT);
 void initWiFi();
 void connectWithClient();
 void turnOnLed();
-void readLed();
-void rotaryEncoder();
+void readSwitch();
+void readRotaryEncoder();
 
 int c = 0;
 String h = "";
@@ -47,7 +47,7 @@ void loop() {
   connectWithClient();
 }
 
-void readLed()
+void readSwitch()
 {
   Wire.beginTransmission(0x38); 
   Wire.write(byte(0x00));      
