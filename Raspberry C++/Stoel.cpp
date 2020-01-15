@@ -4,9 +4,11 @@ Stoel::Stoel(char* ip) : Device(ip) {
 
 	a1 = new Actuator("4", "0");
 	addActuator("4", a1);
-	s1 = new Sensor("5", "0");
-	addSensor(s1);
+	a1 = new Actuator("5", "0");
+	addActuator("5", a1);
 	s1 = new Sensor("6", "0");
+	addSensor(s1);
+	s1 = new Sensor("7", "0");
 	addSensor(s1);
 
 }

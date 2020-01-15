@@ -9,9 +9,12 @@
 #include "Fridge.h"
 #include "Database.h"
 #include "Actuator.h"
+#include <ctime>
+#include <iostream>
 #include <list>
 #include <map>
 
+using namespace std;
 //class Database;
 
 class Control

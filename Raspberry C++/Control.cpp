@@ -2,13 +2,14 @@
 
 Control::Control() 
 {
+	time_t Time = time(nullptr); //Ask for the time once (for bed)
     dat = new Database();                     // create new database object
 
-    Device *bed = new Bed("10.42.0.20");           // create new device
+    Device *bed = new Bed("10.42.0.170", Time);           // create new device
     addDevice("Bed", bed);
 
-    //Device *stoel = new Stoel("10.42.0.10");
-    //addDevice(stoel);// add device to map for devices
+    //Device *stoel = new Stoel("10.42.0.170");
+    //addDevice("Stoel", stoel);// add device to map for devices
 
     //Device *zuil = new Zuil("10.42.0.178");
     //addDevice(zuil); // add zuil
@@ -48,7 +49,7 @@ void Control::compareDatabaseToDevice()
             if(!(act->second->getValue() == dat->readActuatorData(key)))
             {
             	act->second->setValue(dat->readActuatorData(key));
-                dev->second->sendMessage(dat->readActuatorData(key));
+                dev->second->sendMessage(act->second->getKey() + dat->readActuatorData(key));
             }
         }
 
