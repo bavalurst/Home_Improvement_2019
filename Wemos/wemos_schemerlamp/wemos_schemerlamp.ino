@@ -1,8 +1,14 @@
+#include <FastLED.h>
 #include <Wire.h>
 #include <ESP8266WiFi.h>
 #include <string.h>
 #define PORT 3000 
 #include <cstring>
+
+#define LED_PIN     D5
+#define NUM_LEDS    1
+#define I2C_SDL    D1
+#define I2C_SDA    D2
 
 // Network SSID
 const char* ssid = "Wij gebruiken een IDE";
@@ -12,42 +18,49 @@ WiFiServer wifiServer(PORT);
 
 void initWiFi();
 void connectWithClient();
-void turnOnActuators();
-void readDigitalSensors();
-void rotaryEncoder();
+void turnOnLed();
+void readSwitch();
+void readRotaryEncoder();
 
 int c = 0;
-String h = "";
-
-char buffer1[10] = {0};
-char buffer2[20] = {0};
-
-String stringbuffer0;
-String stringbuffer1;
-String stringbuffer2;
-
 unsigned int anin0 = 0;
 unsigned int anin1 = 0;
 
-struct Data {
-  int id = 1;
-  int state;
-};
+char buffer1[20];
+char buffer2[20];
+String sensorString;
+String EndOfNumber = ";";
+
+struct Sensor {
+  String key;
+  String value; 
+}Motion;
+
+struct Actuator {
+  int key = 0;
+  int value = 0;
+}Led;
+
+CRGB leds[NUM_LEDS];
 
 void setup() {
   Wire.begin();
   Serial.begin(115200);
   delay(10);
 
+  leds[0] = CRGB::Red;
+  FastLED.show();
+
   initWiFi();
+
+  Led.key = 5;
 }
  
 void loop() {
-
   connectWithClient();
 }
 
-void readDigitalSensors()
+void readMotionSensor()
 {
   Wire.beginTransmission(0x38); 
   Wire.write(byte(0x00));      
@@ -66,43 +79,18 @@ void readDigitalSensors()
   itoa(inputs, buffer1, 10);
 }
 
-void turnOnActuators()
+void turnOnLed()
 {
-  
-  // Begin transmissie met leds
-  Wire.beginTransmission(0x38);
-  Wire.write(byte(0x03));
-  Wire.write(byte(0x0F));
-  Wire.endTransmission();
-
-  // Zet led op basis van ontvangen state van de PI
-  Wire.beginTransmission(0x38);
-  Wire.write(byte(0x01));
-  Wire.write(byte(c - '0' << 4)); // zet led op basis van ontvangen state
-  Serial.print("Waarde lampje: ");
-  Serial.println(c - '0');
-  Wire.endTransmission();
-}
-
-void readAnalogSensors()
-{
-   //Inside loop for debugging purpose (hot plugging wemos module into i/o board). 
-  Wire.beginTransmission(0x36);
-  Wire.write(byte(0xA2));          
-  Wire.write(byte(0x03));  
-  Wire.endTransmission(); 
-
-  //Read analog 10bit inputs 0&1
-  Wire.requestFrom(0x36, 4);   
-  anin0 = Wire.read()&0x03;  
-  anin0=anin0<<8;
-  anin0 = anin0|Wire.read();  
-  anin1 = Wire.read()&0x03;  
-  anin1=anin1<<8;
-  anin1 = anin1|Wire.read(); 
-  Serial.print("analog in 0: ");
-  Serial.println(anin0);   
-  itoa(anin0, buffer2, 10);
+  if (c - '0' == 1) {
+    // lamp aan als er beweging is
+    leds[0] = CRGB::Gray;
+    FastLED.show();
+  }
+  else{  
+    // lamp uit als er geen beweging is
+    leds[0] = CRGB::Black;  
+    FastLED.show();         
+  }
 }
 
 void connectWithClient()
@@ -115,22 +103,14 @@ void connectWithClient()
  
       while (client.available()>0) {
         c = client.read();
-        Serial.print(c);
-        turnOnLed();
       }
-  
-      readDigitalSensors();
-      readAnalogSensors();
-
-      String a = "2";
-      String b = "3";
-      String c = ";";
-      stringbuffer1 = buffer1;
-      stringbuffer2 = buffer2;
-      stringbuffer0 = a + c + stringbuffer1 + c + b + c + stringbuffer2 + c;
+      turnOnLed();
+      readMotionSensor();
+      Motion.value = buffer1;
+      sensorString = Motion.key + EndOfNumber + Motion.value + EndOfNumber;
 
       char writebuffer[50];
-      strcpy(writebuffer, stringbuffer0.c_str());
+      strcpy(writebuffer, sensorString.c_str());
       client.write(writebuffer);
       delay(10);
     }
