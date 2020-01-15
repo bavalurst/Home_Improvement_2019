@@ -8,8 +8,8 @@ Control::Control()
     Device *bed = new Bed("10.42.0.170", Time);           // create new device
     addDevice("Bed", bed);
 
-    //Device *stoel = new Stoel("10.42.0.10");
-    //addDevice(stoel);// add device to map for devices
+    //Device *stoel = new Stoel("10.42.0.170");
+    //addDevice("Stoel", stoel);// add device to map for devices
 
     //Device *zuil = new Zuil("10.42.0.178");
     //addDevice(zuil); // add zuil

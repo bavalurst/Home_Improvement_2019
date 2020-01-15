@@ -3,6 +3,7 @@
 Bed::Bed(char* ip, time_t Time) : Device(ip)
 {
 	timeStart = Time;
+	oneSecond = timeStart + 1;
 	a1 = new Actuator("1", "0");
 	addActuator("1", a1);
 	s1 = new Sensor("2", "0");
@@ -19,7 +20,30 @@ string Bed::logic(map<string, Device*> dev)
 	string s = "";
 
 	map<string, Actuator*> acts = dev.at("Bed")->getActuators();
+	if (seizureLevel == -1){
+		lastAct = stoi(this->s2->getValue());
+		seizureLevel = 0;
+		s = s + "31;0;";
+	}
 
+	if(oneSecond - time(nullptr) == 0 && seizureLevel < 6) {
+		oneSecond = time(nullptr) + 1;
+		seizureTime++;
+		if (lastAct - stoi(this->s2->getValue()) > 200 || lastAct - stoi(this->s2->getValue()) < -200 ) {
+			seizureLevel++;
+		}
+		lastAct = stoi(this->s2->getValue());
+
+		if (seizureTime >= 5) {
+			seizureTime = 0;
+		}
+	}
+
+	if (seizureLevel >= 2 && seizureTime <= 5) {
+		cout << endl << endl << endl << "TIMMY GAAT DEAUDDDDD!!!!!11" << endl << endl << endl;
+		s = s + "31;1;";
+		seizureLevel = -1;
+	}
 
 	if ((time(nullptr) - timeStart) > 16 && goSleep == 0 && alarm == 0) {
 		s = s + "1;1;";
@@ -32,7 +56,7 @@ string Bed::logic(map<string, Device*> dev)
 	}
 
 	if ((time(nullptr) - timeStart) > 8 && goSleep == 1) {
-		cout << "WAKKER WORDEN TIMMY!!!1" << endl;
+		cout << "WAKKER WORDEN TIMMY!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1" << endl;
 		alarm = 1;
 		s = s + "30;1;";
 		timeStart = time(nullptr);

@@ -16,6 +16,11 @@ private:
 	time_t timeStart;
 	bool goSleep = 0;
 	bool alarm = 0;
+
+	int oneSecond = 0;
+	int seizureTime = 0;
+	int seizureLevel = -1;
+	int lastAct = 0;
 public:
     Bed(char*, time_t);
     virtual ~Bed();
