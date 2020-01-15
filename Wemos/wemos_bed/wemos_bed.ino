@@ -17,22 +17,18 @@ void readSwitch();
 void readRotaryEncoder();
 
 int c = 0;
-String h = "";
-
-char buffer1[10] = {0};
-char buffer2[20] = {0};
-
-String stringbuffer0;
-String stringbuffer1;
-String stringbuffer2;
-
 unsigned int anin0 = 0;
 unsigned int anin1 = 0;
 
-struct Data {
-  int id = 1;
-  int state;
-};
+char buffer1[20];
+char buffer2[20];
+String sensorString;
+String EndOfNumber = ";";
+
+struct Sensor {
+  String key;
+  String value; 
+}Switch, RotaryEncoder;
 
 void setup() {
   Wire.begin();
@@ -40,10 +36,12 @@ void setup() {
   delay(10);
 
   initWiFi();
+
+  Switch.key = "2";
+  RotaryEncoder.key = "3";
 }
  
 void loop() {
-
   connectWithClient();
 }
 
@@ -84,7 +82,7 @@ void turnOnLed()
   Wire.endTransmission();
 }
 
-void rotaryEncoder()
+void readRotaryEncoder()
 {
    //Inside loop for debugging purpose (hot plugging wemos module into i/o board). 
   Wire.beginTransmission(0x36);
@@ -97,9 +95,6 @@ void rotaryEncoder()
   anin0 = Wire.read()&0x03;  
   anin0=anin0<<8;
   anin0 = anin0|Wire.read();  
-  anin1 = Wire.read()&0x03;  
-  anin1=anin1<<8;
-  anin1 = anin1|Wire.read(); 
   Serial.print("analog in 0: ");
   Serial.println(anin0);   
   itoa(anin0, buffer2, 10);
@@ -119,22 +114,21 @@ void connectWithClient()
         turnOnLed();
       }
   
-      readLed();
-      rotaryEncoder();
+      readSwitch();
+      readRotaryEncoder();
 
-      String a = "2";
-      String b = "3";
-      String c = ";";
-      stringbuffer1 = buffer1;
-      stringbuffer2 = buffer2;
-      stringbuffer0 = a + c + stringbuffer1 + c + b + c + stringbuffer2 + c;
+      Switch.value = buffer1;
+      RotaryEncoder.value = buffer2;
+      sensorString = Switch.key + EndOfNumber + Switch.value + EndOfNumber + RotaryEncoder.key + EndOfNumber + RotaryEncoder.value + EndOfNumber;
 
       char writebuffer[50];
-      strcpy(writebuffer, stringbuffer0.c_str());
+      strcpy(writebuffer, sensorString.c_str());
       client.write(writebuffer);
       delay(10);
     }
     client.stop();
+
+    Serial.println(sensorString);
     Serial.println(" ");
     Serial.println("Client disconnected");
  }
