@@ -134,17 +134,19 @@ void connectWithClient()
         
         if(c - '0' == 1)
         {
-          Serial.print("C : ");
+          Serial.print("1. C : ");
           c = client.read();
           if(c - '0' == 8)
           {
-            Serial.print("C : ");
+            Serial.print("2. C : ");
             c = client.read();
             Fan.value = c - '0';
             Cooler.value = c - '0';
+            Serial.print("3. C : ");
           }
         }
       }
+      delay(10);
       turnOnCooler();
       turnOnFan();
       readSwitch();
