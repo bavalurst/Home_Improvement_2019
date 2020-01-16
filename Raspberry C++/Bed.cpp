@@ -1,5 +1,10 @@
 #include "Bed.h" 
 
+
+// Schakelaar bedient lamp ???
+//     Wat moet hij anders doen ???
+// Seizure alarm moet uit via de GUI ???
+
 Bed::Bed(char* ip, time_t Time) : Device(ip)
 {
 	timeStart = Time;
@@ -12,7 +17,11 @@ Bed::Bed(char* ip, time_t Time) : Device(ip)
 	addSensor(s2);
 }
 
-Bed::~Bed() {}
+Bed::~Bed() {
+	delete a1;
+	delete s1;
+	delete s2;
+}
 
 string Bed::logic(map<string, Device*> dev)
 {

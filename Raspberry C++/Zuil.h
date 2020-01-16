@@ -9,6 +9,7 @@ private:
     /* data */
 	Actuator* a1;
 	Sensor* s1;
+	Sensor* s2;
 
 public:
     Zuil(char*);
