@@ -5,9 +5,9 @@
 //     Wat moet hij anders doen ???
 // Seizure alarm moet uit via de GUI ???
 
-Bed::Bed(char* ip, time_t Time) : Device(ip)
+Bed::Bed(char* ip) : Device(ip)
 {
-	timeStart = Time;
+	timeStart = time(nullptr);
 	oneSecond = timeStart + 1;
 	a1 = new Actuator("1", "0");
 	addActuator("1", a1);
@@ -35,7 +35,7 @@ string Bed::logic(map<string, Device*> dev)
 		s = s + "31;0;";
 	}
 
-	if(oneSecond - time(nullptr) == 0 && seizureLevel < 6) {
+	if(oneSecond - time(nullptr) == 0 && seizureLevel < 3) {
 		oneSecond = time(nullptr) + 1;
 		seizureTime++;
 		if (lastAct - stoi(this->s2->getValue()) > 200 || lastAct - stoi(this->s2->getValue()) < -200 ) {
@@ -48,7 +48,7 @@ string Bed::logic(map<string, Device*> dev)
 		}
 	}
 
-	if (seizureLevel >= 2 && seizureTime <= 5) {
+	if (seizureLevel >= 2 && seizureTime <= 3) {
 		cout << endl << endl << endl << "TIMMY GAAT DEAUDDDDD!!!!!11" << endl << endl << endl;
 		s = s + "31;1;";
 		seizureLevel = -1;
