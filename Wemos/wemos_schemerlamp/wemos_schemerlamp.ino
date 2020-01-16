@@ -5,7 +5,7 @@
 #define PORT 3000 
 #include <cstring>
 
-#define LED_PIN     D5
+#define DATA_PIN     D5
 #define NUM_LEDS    1
 #define I2C_SDL    D1
 #define I2C_SDA    D2
@@ -48,8 +48,9 @@ void setup() {
   Serial.begin(115200);
   delay(10);
 
-  leds[0] = CRGB::Red;
-  FastLED.show();
+  pinMode(D5, OUTPUT);
+
+  FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
 
   initWiFi();
 
