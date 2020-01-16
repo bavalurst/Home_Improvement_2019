@@ -2,25 +2,43 @@
 
 Zuil::Zuil(char* ip) : Device(ip) {
 
-	a1 = new Actuator("7", "0");
-	addActuator("7", a1);
-	s1 = new Sensor("8", "0");
+	a1 = new Actuator("10", "0");
+	addActuator("10", a1);
+	a1 = new Actuator("11", "0");
+	addActuator("11", a1);
+	s1 = new Sensor("12", "0");
 	addSensor(s1);
-	s1 = new Sensor("9", "0");
-	addSensor(s1);
+	s2 = new Sensor("13", "0");
+	addSensor(s2);
 
 }
 
 Zuil::~Zuil() {
-
 	delete a1;
 	delete s1;
+	delete s2;
 
 }
 
 string Zuil::logic(map<string, Device*> dev)
 {
-	cout << "This is logic zuil" << endl;
-	cout << " " << endl;
+	string a = this->a1->getValue();
+	string s = "";
+
+	map<string, Actuator*> acts = dev.at("Zuil")->getActuators();
+
+	if (stoi(this->s2->getValue()) < 650) {
+			s = s + "10;1;";
+			s = s + "32;1;";
+			cout <<endl << endl << endl << "ER IS BRAND!!!!! SNEL DOE ER WAT AAN!!!!" << endl << endl << endl;
+	}
+
+	if (stoi(this->s1->getValue()) == 1) {
+		s = s + "32;1;";
+		cout <<endl << endl << endl << "Timmothy heeft snel hulp nodig!" << endl << endl << endl;
+
+	}
+
+	return s;
 }
 
