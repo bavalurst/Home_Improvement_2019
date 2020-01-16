@@ -111,9 +111,8 @@ void connectWithClient()
       while (client.available()>0) {
         c = client.read();
         Serial.print(c);
-        turnOnLed();
       }
-  
+      turnOnLed();
       readSwitch();
       readRotaryEncoder();
 
