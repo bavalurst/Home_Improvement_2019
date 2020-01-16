@@ -12,27 +12,28 @@ WiFiServer wifiServer(PORT);
 
 void initWiFi();
 void connectWithClient();
-void turnOnActuators();
-void readDigitalSensors();
-void rotaryEncoder();
+void turnOnLed();
+void readSwitch();
+void readRotaryEncoder();
 
 int c = 0;
-String h = "";
-
-char buffer1[10] = {0};
-char buffer2[20] = {0};
-
-String stringbuffer0;
-String stringbuffer1;
-String stringbuffer2;
-
 unsigned int anin0 = 0;
 unsigned int anin1 = 0;
 
-struct Data {
-  int id = 1;
-  int state;
-};
+char buffer1[20];
+char buffer2[20];
+String sensorString;
+String EndOfNumber = ";";
+
+struct Sensor {
+  String key;
+  String value; 
+}Switch, RotaryEncoder;
+
+struct Actuator {
+  int key = 0;
+  int value = 0;
+}Led, Tril;
 
 void setup() {
   Wire.begin();
@@ -40,14 +41,18 @@ void setup() {
   delay(10);
 
   initWiFi();
+
+  Switch.key = "7";
+  RotaryEncoder.key = "6";
+  Led.key = 5;
+  Tril.key = 4;
 }
  
 void loop() {
-
   connectWithClient();
 }
 
-void readDigitalSensors()
+void readSwitch()
 {
   Wire.beginTransmission(0x38); 
   Wire.write(byte(0x00));      
@@ -66,7 +71,7 @@ void readDigitalSensors()
   itoa(inputs, buffer1, 10);
 }
 
-void turnOnActuators()
+void turnOnLedAndTril()
 {
   
   // Begin transmissie met leds
@@ -78,13 +83,13 @@ void turnOnActuators()
   // Zet led op basis van ontvangen state van de PI
   Wire.beginTransmission(0x38);
   Wire.write(byte(0x01));
-  Wire.write(byte(c - '0' << 4)); // zet led op basis van ontvangen state
+  Wire.write(byte((Led.value + Tril.value) << 4)); // zet led op basis van ontvangen state
   Serial.print("Waarde lampje: ");
-  Serial.println(c - '0');
+  Serial.println((Led.value + Tril.value));
   Wire.endTransmission();
 }
 
-void readAnalogSensors()
+void readRotaryEncoder()
 {
    //Inside loop for debugging purpose (hot plugging wemos module into i/o board). 
   Wire.beginTransmission(0x36);
@@ -97,9 +102,6 @@ void readAnalogSensors()
   anin0 = Wire.read()&0x03;  
   anin0=anin0<<8;
   anin0 = anin0|Wire.read();  
-  anin1 = Wire.read()&0x03;  
-  anin1=anin1<<8;
-  anin1 = anin1|Wire.read(); 
   Serial.print("analog in 0: ");
   Serial.println(anin0);   
   itoa(anin0, buffer2, 10);
@@ -115,22 +117,29 @@ void connectWithClient()
  
       while (client.available()>0) {
         c = client.read();
-        Serial.print(c);
-        turnOnLed();
-      }
-  
-      readDigitalSensors();
-      readAnalogSensors();
+        
+        if(c - '0' == 5)
+        {
+          c = client.read();
+          Led.value = c - '0'; 
+        }
 
-      String a = "2";
-      String b = "3";
-      String c = ";";
-      stringbuffer1 = buffer1;
-      stringbuffer2 = buffer2;
-      stringbuffer0 = a + c + stringbuffer1 + c + b + c + stringbuffer2 + c;
+        if(c - '0' == 4)
+        {
+          c = client.read();
+          Tril.value = c - '0'; 
+        }
+      }
+      turnOnLedAndTril();
+      readSwitch();
+      readRotaryEncoder();
+
+      Switch.value = buffer1;
+      RotaryEncoder.value = buffer2;
+      sensorString = Switch.key + EndOfNumber + Switch.value + EndOfNumber + RotaryEncoder.key + EndOfNumber + RotaryEncoder.value + EndOfNumber;
 
       char writebuffer[50];
-      strcpy(writebuffer, stringbuffer0.c_str());
+      strcpy(writebuffer, sensorString.c_str());
       client.write(writebuffer);
       delay(10);
     }
