@@ -2,6 +2,10 @@
 #define FRIDGE_H
 
 #include "Device.h"
+#include <ctime>
+#include <iostream>
+
+using namespace std;
 
 class Fridge : public Device
 {
@@ -9,9 +13,12 @@ private:
     /* data */
 	Actuator* a1;
 	Sensor* s1;
-
+	Sensor* s2;
+	time_t timeStart;
+	int fridgeLimit = 10;
+	int deurOpen = 0;
 public:
-    Fridge(char*);
+    Fridge(char*, time_t);
     virtual ~Fridge();
     virtual string logic(map<string, Device*>);
 };
