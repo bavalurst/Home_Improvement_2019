@@ -11,6 +11,7 @@
 #include "Actuator.h"
 #include <iostream>
 #include <list>
+#include <ctime>
 #include <map>
 
 using namespace std;
@@ -21,12 +22,15 @@ class Control
 private:
     Database *dat;
     map<string, Device*> devices;
+    time_t Time = time(nullptr);
+    time_t medicIntakeTime = 0;
 public:
     Control(/* args */);
     ~Control();
     void compareDatabaseToDevice();
     vector<string> parseMessage(string);
     void addDevice(string, Device*);
+    void medicine();
 };
 
 #endif /* CONTROL_H */

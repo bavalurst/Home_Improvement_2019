@@ -3,8 +3,7 @@
 Control::Control() 
 {
     dat = new Database();                     // create new database object
-
-    Device *bed = new Bed("10.42.0.170");           // create new device
+    Device *bed = new Bed("10.42.0.0");           // create new device
     addDevice("Bed", bed); // create bed
 
     //Device *stoel = new Stoel("10.42.0.170");
@@ -16,8 +15,8 @@ Control::Control()
     //Device *schemerlamp = new Schemerlamp("10.42.0.137");
     //addDevice(schemerlamp); // add schemerlamp
 
-	//Device *fridge = new Fridge("10.42.0.170");
-    //addDevice("Fridge", fridge); // add fridge
+//    Device *fridge = new Fridge("10.42.0.10");
+//    addDevice("Fridge", fridge); // add fridge
 }       
 
 Control::~Control()
@@ -51,7 +50,7 @@ void Control::compareDatabaseToDevice()
                 dev->second->sendMessage(act->second->getKey() + dat->readActuatorData(key));
             }
         }
-
+        medicine();
         usleep(100000); // wait 100ms to prevent socket failure
 
         string buffer = dev->second->receiveMessage();
@@ -110,4 +109,19 @@ vector<string> Control::parseMessage(string message)
 
 }
 
+void Control::medicine() {
+	cout << Time << endl;
+	if ((time(nullptr) - Time) >= 60) {
+		//cout << endl << endl << endl << "Medicijnen innemen!" << endl << endl << endl;
+		dat->writeActuatorData("35", "1");
+		Time = time(nullptr);
+		medicIntakeTime = time(nullptr);
+		}
+	if (((time(nullptr) - medicIntakeTime) >= 10)  && (dat->readActuatorData("35") == "1") && (dat->readActuatorData("36") == "0")) {
+		//cout << endl << endl << endl << "Timmothy heeft zijn medicijnen niet ingenomen !!!!!!!!!!!!!!111" << endl << endl << endl;
+		dat->writeActuatorData("36", "1");
+		dat->writeActuatorData("35", "0");
+		medicIntakeTime = time(nullptr);
+	}
+}
 
