@@ -1,7 +1,7 @@
 #include "Fridge.h"
 
-Fridge::Fridge(char* ip, time_t Time) : Device(ip) {
-	timeStart = Time;
+Fridge::Fridge(char* ip) : Device(ip) {
+	timeStart = time(nullptr);
 	a1 = new Actuator("18", "0");	// cooling+fan -> send 1
 	addActuator("18", a1);
 	s1 = new Sensor("19", "0");		// temp inside  || 0 - 1023
@@ -26,16 +26,19 @@ string Fridge::logic(map<string, Device*> dev)
 	if(stoi(this->s1->getValue()) > 300 && stoi(this->s2->getValue()) == 1){
 		s = s + "18;1;";
 		cout << "fridge on" << endl;
+		deurOpen = 0;
+		cout << deurOpen << endl;
 	}
 
 	if(stoi(this->s2->getValue()) ==  0 && deurOpen == 0){
+		timeStart = time(nullptr);
+		cout << "huidige tijd" << timeStart << endl;
 		deurOpen = 1;
-		timeStart == time(nullptr);
 	}
-	if((time(nullptr) - timeStart) >= fridgeLimit && deurOpen == 1){
+
+	if(time(nullptr) >= (timeStart + 10) && deurOpen == 1){
 		s = s + "18;0;";
 		cout << "fridge off" << endl;
-		deurOpen = 0;
 	}
 
 	return s;

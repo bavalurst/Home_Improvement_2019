@@ -27,7 +27,7 @@ string Zuil::logic(map<string, Device*> dev)
 
 	map<string, Actuator*> acts = dev.at("Zuil")->getActuators();
 
-	if (stoi(this->s2->getValue()) < 650) {
+	if (stoi(this->s2->getValue()) < 400) {
 			s = s + "10;1;";
 			s = s + "32;1;";
 			cout <<endl << endl << endl << "ER IS BRAND!!!!! SNEL DOE ER WAT AAN!!!!" << endl << endl << endl;

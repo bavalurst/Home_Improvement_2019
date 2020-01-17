@@ -22,7 +22,7 @@ private:
 	int seizureLevel = -1;
 	int lastAct = 0;
 public:
-    Bed(char*, time_t);
+    Bed(char*);
     virtual ~Bed();
     virtual string logic(map<string, Device*>);
 };
