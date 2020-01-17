@@ -142,7 +142,7 @@ void connectWithClient()
             if(client.available()>0)
             {
               c = client.read();
-              Led.value = Led.value * 10 + c - '0';
+              Led.value = Led.value * 10 + (c - '0');
             }
           }else if(c - '0' == 5)
           {

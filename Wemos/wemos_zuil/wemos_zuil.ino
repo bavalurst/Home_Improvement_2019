@@ -83,7 +83,7 @@ void turnOnLedAndBuzzer()
   // Zet led op basis van ontvangen state van de PI
   Wire.beginTransmission(0x38);
   Wire.write(byte(0x01));
-  Wire.write(byte((Led.value + Buzzer.value) << 4)); // zet led op basis van ontvangen state
+  Wire.write(byte(1 << 4)); // zet led op basis van ontvangen state
   Wire.endTransmission();
 }
 
@@ -110,25 +110,27 @@ void connectWithClient()
   WiFiClient client = wifiServer.available();
   
   if (client) {
- 
+      Serial.println("1");
     while (client.connected()) {
- 
+      Serial.println("2");
       while (client.available()>0) {
+        Serial.println("3");
         c = client.read();
         
-        if(c - '0' == 10)
+        if(c - '0' == 1)
         {
-          c = client.read();
-          Buzzer.value = c - '0'; 
+          if(c - '0' == 0)
+          {
+             c = client.read();
+             Buzzer.value = c - '0'; 
+          }else if(c - '0' == 1)
+          {
+            c = client.read();
+            Led.value = c - '0'; 
+          }
         }
-
-        if(c - '0' == 11)
-        {
-          c = client.read();
-          Led.value = c - '0'; 
-        }
+        turnOnLedAndBuzzer();
       }
-      turnOnLedAndBuzzer();
       readSwitch();
       readSmokeDetector();
 
