@@ -16,9 +16,9 @@ private:
 	Sensor* s2;
 	time_t timeStart;
 	int fridgeLimit = 10;
-	int deurOpen = 0;
+	int deurOpen;
 public:
-    Fridge(char*, time_t);
+    Fridge(char*);
     virtual ~Fridge();
     virtual string logic(map<string, Device*>);
 };
