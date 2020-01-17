@@ -55,6 +55,7 @@ void setup() {
   initWiFi();
 
   Led.key = 5;
+  Motion.key = 9;
 }
  
 void loop() {
