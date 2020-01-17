@@ -46,6 +46,9 @@ void setup() {
   Smoke.key = "13";
   Led.key = 11;
   Buzzer.key = 10;
+
+  Led.value = 0;
+  Buzzer.value = 0;  
 }
  
 void loop() {
@@ -65,9 +68,9 @@ void readSwitch()
   else {
     inputs = 1;
   }
-  Serial.print("Digital in: ");
-  Serial.println(inputs&0x0F);
-  Serial.println(inputs);
+  //Serial.print("Digital in: ");
+  //Serial.println(inputs&0x0F);
+  //Serial.println(inputs);
   itoa(inputs, buffer1, 10);
 }
 
@@ -79,11 +82,16 @@ void turnOnLedAndBuzzer()
   Wire.write(byte(0x03));
   Wire.write(byte(0x0F));
   Wire.endTransmission();
-
+  Serial.print("Led + Buzzer : ");
+  Serial.println(Led.value + Buzzer.value);
+  Serial.print("Led Value : ");
+  Serial.println(Led.value);
+  Serial.print("Buzzer Value : ");
+  Serial.println(Buzzer.value);
   // Zet led op basis van ontvangen state van de PI
   Wire.beginTransmission(0x38);
   Wire.write(byte(0x01));
-  Wire.write(byte(1 << 4)); // zet led op basis van ontvangen state
+  Wire.write(byte((Led.value + Buzzer.value) << 4)); // zet led op basis van ontvangen state
   Wire.endTransmission();
 }
 
@@ -100,8 +108,8 @@ void readSmokeDetector()
   anin0 = Wire.read()&0x03;  
   anin0=anin0<<8;
   anin0 = anin0|Wire.read();  
-  Serial.print("analog in 0: ");
-  Serial.println(anin0);   
+  //Serial.print("analog in 0: ");
+  //Serial.println(anin0);   
   itoa(anin0, buffer2, 10);
 }
 
@@ -110,26 +118,33 @@ void connectWithClient()
   WiFiClient client = wifiServer.available();
   
   if (client) {
-      Serial.println("1");
+      //Serial.println("1");
+      delay(20);
     while (client.connected()) {
-      Serial.println("2");
+      //Serial.println("2");
       while (client.available()>0) {
-        Serial.println("3");
-        c = client.read();
         
+        c = client.read();
+        //Serial.print("C1 : ");
+        //Serial.println(c);
         if(c - '0' == 1)
         {
+          c = client.read();
+          //Serial.print("C2 : ");
+          //Serial.println(c);
           if(c - '0' == 0)
           {
              c = client.read();
+             //Serial.print("C3 : ");
+             //Serial.println(c);
              Buzzer.value = c - '0'; 
           }else if(c - '0' == 1)
           {
             c = client.read();
             Led.value = c - '0'; 
           }
+          turnOnLedAndBuzzer();
         }
-        turnOnLedAndBuzzer();
       }
       readSwitch();
       readSmokeDetector();
