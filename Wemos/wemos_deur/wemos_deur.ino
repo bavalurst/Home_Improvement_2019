@@ -3,6 +3,7 @@
 #include <string.h>
 #define PORT 3000 
 #include <cstring>
+#include <Servo.h>
 
 // Network SSID
 const char* ssid = "Wij gebruiken een IDE";
@@ -12,27 +13,34 @@ WiFiServer wifiServer(PORT);
 
 void initWiFi();
 void connectWithClient();
-void turnOnActuators();
-void readDigitalSensors();
-void rotaryEncoder();
+void turnOnLeds();
+void turnOnServo();
+void readSwitches();
 
 int c = 0;
-String h = "";
-
-char buffer1[10] = {0};
-char buffer2[20] = {0};
-
-String stringbuffer0;
-String stringbuffer1;
-String stringbuffer2;
-
 unsigned int anin0 = 0;
 unsigned int anin1 = 0;
 
-struct Data {
-  int id = 1;
-  int state;
-};
+int pos = 79;
+unsigned int inputsLedBuiten = 0;
+unsigned int inputsLedBinnen = 0;
+
+char buffer1[20];
+char buffer2[20];
+String sensorString;
+String EndOfNumber = ";";
+
+Servo myservo; 
+
+struct Sensor {
+  String key;
+  String value; 
+}switchBuiten, switchBinnen;
+
+struct Actuator {
+  int key;
+  int value; 
+}ledBuiten, ledBinnen, servoDeur;
 
 void setup() {
   Wire.begin();
@@ -40,33 +48,49 @@ void setup() {
   delay(10);
 
   initWiFi();
+
+  myservo.attach(D5);
+  myservo.write(pos);
+
+  switchBuiten.key = "26";
+  switchBinnen.key = "25";
+  ledBuiten.key = 23;
+  ledBinnen.key = 22;
+  servoDeur.key = 24;
 }
  
 void loop() {
-
   connectWithClient();
+  readSwitches();
 }
 
-void readDigitalSensors()
+void readSwitches()
 {
   Wire.beginTransmission(0x38); 
   Wire.write(byte(0x00));      
   Wire.endTransmission();
   Wire.requestFrom(0x38, 1);   
   unsigned int inputs = Wire.read();  
-  if (inputs % 2 == 0){
-     inputs = 0;
+  if (inputs % 2 == 0)
+  {
+     if((inputs&0x02) / 2 == 1)
+     {
+      inputsLedBuiten = 2;
+     }else
+     {
+      inputsLedBinnen = 0;
+      inputsLedBuiten = 0;
+     }
+  }else 
+  {
+    inputsLedBinnen = 1;
   }
-  else {
-    inputs = 1;
-  }
-  //Serial.print("Digital in: ");
-  //Serial.println(inputs&0x0F);
-  //Serial.println(inputs);
-  itoa(inputs, buffer1, 10);
+  
+  itoa(inputsLedBinnen, buffer1, 10);
+  itoa(inputsLedBuiten, buffer2, 10);
 }
 
-void turnOnActuators()
+void turnOnLeds()
 {
   
   // Begin transmissie met leds
@@ -78,32 +102,29 @@ void turnOnActuators()
   // Zet led op basis van ontvangen state van de PI
   Wire.beginTransmission(0x38);
   Wire.write(byte(0x01));
-  Wire.write(byte(c - '0' << 4)); // zet led op basis van ontvangen state
-  Serial.print("Waarde lampje: ");
-  Serial.println(c - '0');
+  Wire.write(byte(ledBuiten.value + ledBinnen.value << 4)); // zet led op basis van ontvangen state
   Wire.endTransmission();
 }
 
-void readAnalogSensors()
+void turnOnServo()
 {
-   //Inside loop for debugging purpose (hot plugging wemos module into i/o board). 
-  Wire.beginTransmission(0x36);
-  Wire.write(byte(0xA2));          
-  Wire.write(byte(0x03));  
-  Wire.endTransmission(); 
-
-  //Read analog 10bit inputs 0&1
-  Wire.requestFrom(0x36, 4);   
-  anin0 = Wire.read()&0x03;  
-  anin0=anin0<<8;
-  anin0 = anin0|Wire.read();  
-  anin1 = Wire.read()&0x03;  
-  anin1=anin1<<8;
-  anin1 = anin1|Wire.read(); 
-  Serial.print("analog in 0: ");
-  Serial.println(anin0);   
-  itoa(anin0, buffer2, 10);
+  // deur openen als knop aan de buitenkant wordt ingedrukt
+  if (servoDeur.value == 1) {                    
+    for (pos = 79; pos >= -30; pos -= 1) {        
+      myservo.write(pos);                        
+      delay(10);
+    }
+  }
+   // deur sluiten na ontvangen 0
+  if(servoDeur.value == 0)
+  {
+     for (pos = -30; pos <= 79; pos += 1) {        // deur sluiten na ontvangen 0
+     myservo.write(pos);
+     delay(10);
+     }  
+  }
 }
+
 
 void connectWithClient()
 {
@@ -116,25 +137,23 @@ void connectWithClient()
       while (client.available()>0) {
         c = client.read();
         Serial.print(c);
-        turnOnLed();
       }
-  
-      readDigitalSensors();
-      readAnalogSensors();
+      //turnOnLeds();
+      //turnOnServo();
+      //readSwitches();
 
-      String a = "2";
-      String b = "3";
-      String c = ";";
-      stringbuffer1 = buffer1;
-      stringbuffer2 = buffer2;
-      stringbuffer0 = a + c + stringbuffer1 + c + b + c + stringbuffer2 + c;
+      switchBinnen.value = buffer1;
+      switchBuiten.value = buffer2;
+      sensorString = switchBinnen.key + EndOfNumber + switchBinnen.value + EndOfNumber + switchBuiten.key + EndOfNumber + switchBuiten.value + EndOfNumber;
 
       char writebuffer[50];
-      strcpy(writebuffer, stringbuffer0.c_str());
+      strcpy(writebuffer, sensorString.c_str());
       client.write(writebuffer);
       delay(10);
     }
     client.stop();
+
+    Serial.println(sensorString);
     Serial.println(" ");
     Serial.println("Client disconnected");
  }
