@@ -5,6 +5,7 @@
 #include "Bed.h"
 #include "Stoel.h"
 #include "Zuil.h"
+#include "Deur.h"
 #include "Schemerlamp.h"
 #include "Fridge.h"
 #include "Database.h"
