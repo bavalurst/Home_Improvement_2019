@@ -3,20 +3,28 @@
 Control::Control() 
 {
     dat = new Database();                     // create new database object
-    Device *bed = new Bed("10.42.0.0");           // create new device
+    Device *bed = new Bed("10.42.0.10");           // create new device
     addDevice("Bed", bed); // create bed
 
-    //Device *stoel = new Stoel("10.42.0.170");
-    //addDevice("Stoel", stoel);// add device to map for devices
+    Device *stoel = new Stoel("10.42.0.14");
+    addDevice("Stoel", stoel);// add device to map for devices
 
-    //Device *zuil = new Zuil("10.42.0.170");
-    //addDevice("Zuil", zuil); // add zuil
+    Device *zuil = new Zuil("10.42.0.16");
+    addDevice("Zuil", zuil); // add zuil
 
-    //Device *schemerlamp = new Schemerlamp("10.42.0.137");
-    //addDevice(schemerlamp); // add schemerlamp
+    Device *schemerlamp = new Schemerlamp("10.42.0.13");
+    addDevice("Schemerlamp", schemerlamp); // add schemerlamp
 
-//    Device *fridge = new Fridge("10.42.0.10");
-//    addDevice("Fridge", fridge); // add fridge
+    Device *fridge = new Fridge("10.42.0.12");
+    addDevice("Fridge", fridge); // add fridge
+
+    Device *deur = new Deur("10.42.0.11");
+    addDevice("Deur", deur); // add Deur
+
+    Device *venster = new Venster("10.42.0.15");
+    addDevice("Venster", venster); // add Venster
+
+
 }       
 
 Control::~Control()
@@ -46,6 +54,7 @@ void Control::compareDatabaseToDevice()
 
             if(!(act->second->getValue() == dat->readActuatorData(key)))
             {
+            	//cout << "Sending: " << dat->readActuatorData(key) << "To Key: " << key << endl;
             	act->second->setValue(dat->readActuatorData(key));
                 dev->second->sendMessage(act->second->getKey() + dat->readActuatorData(key));
             }
@@ -110,7 +119,7 @@ vector<string> Control::parseMessage(string message)
 }
 
 void Control::medicine() {
-	cout << Time << endl;
+	//cout << Time << endl;
 	if ((time(nullptr) - Time) >= 60) {
 		//cout << endl << endl << endl << "Medicijnen innemen!" << endl << endl << endl;
 		dat->writeActuatorData("35", "1");

@@ -41,7 +41,7 @@ void Database::refreshSensorData() {
 
 string Database::readActuatorData(string key) {
 
-	//this->refreshActuatorData();
+	this->refreshActuatorData();
 	string banaan = actuator[key].asString();
 	return banaan;
 }
