@@ -37,7 +37,7 @@ string Fridge::logic(map<string, Device*> dev)
 	}
 
 	if(time(nullptr) >= (timeStart + 10) && deurOpen == 1){
-		s = s + "18;0;";
+		s = s + "18;0;34;1;";
 		cout << "fridge off" << endl;
 	}
 
