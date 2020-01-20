@@ -15,6 +15,9 @@ const char* ssid = "Wij gebruiken een IDE";
 const char* password = "Mijnarends";
 
 WiFiServer wifiServer(PORT);
+IPAddress ip(10, 42, 0, 15);
+IPAddress GW(10, 42, 0, 1);
+IPAddress netmask(255, 255, 255, 0);
 
 void initWiFi();
 void connectWithClient();
@@ -180,6 +183,8 @@ void initWiFi()
   Serial.println(ssid);
   WiFi.hostname("Wemos");
   WiFi.begin(ssid, password);
+  WiFi.mode(WIFI_STA);
+  WiFi.config(ip, GW, netmask, GW);
  
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
