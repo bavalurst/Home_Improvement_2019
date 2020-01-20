@@ -5,8 +5,8 @@
 #include <cstring>
 
 // Network SSID
-const char* ssid = "Wij gebruiken een IDE";
-const char* password = "Mijnarends";
+const char* ssid = "Groep 9";
+const char* password = "LekkerBelangrijk";
 
 WiFiServer wifiServer(PORT);
 IPAddress ip(10, 42, 0, 16);
