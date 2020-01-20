@@ -4,11 +4,13 @@
 #define PORT 3000 
 #include <cstring>
 
-// Network SSID
+// Network SSID and wachtwoord
 const char* ssid = "Groep 9";
 const char* password = "LekkerBelangrijk";
 
 WiFiServer wifiServer(PORT);
+
+// statische IP
 IPAddress ip(10, 42, 0, 10);
 IPAddress GW(10, 42, 0, 1);
 IPAddress netmask(255, 255, 255, 0);
@@ -20,6 +22,7 @@ void readSwitch();
 void readRotaryEncoder();
 
 int c = 0;
+
 unsigned int anin0 = 0;
 unsigned int anin1 = 0;
 
@@ -48,13 +51,14 @@ void loop() {
   connectWithClient();
 }
 
+// Deze functie leest de switch op het bed uit
 void readSwitch()
 {
   Wire.beginTransmission(0x38); 
   Wire.write(byte(0x00));      
   Wire.endTransmission();
   Wire.requestFrom(0x38, 1);   
-  unsigned int inputs = Wire.read();  
+  unsigned int inputs = Wire.read();   // hier wordt de switch uitgelezen
   if (inputs % 2 == 0){
      inputs = 0;
   }
@@ -64,7 +68,7 @@ void readSwitch()
   //Serial.print("Digital in: ");
   //Serial.println(inputs&0x0F);
   //Serial.println(inputs);
-  itoa(inputs, buffer1, 10);
+  itoa(inputs, buffer1, 10);          // zet de integer waarde van de switch om naar een string, zodat deze over de socket verbinding gestuurd kan worden
 }
 
 void turnOnLed()
@@ -87,13 +91,13 @@ void turnOnLed()
 
 void readRotaryEncoder()
 {
-   //Inside loop for debugging purpose (hot plugging wemos module into i/o board). 
+  // Begin transmissie met leds 
   Wire.beginTransmission(0x36);
   Wire.write(byte(0xA2));          
   Wire.write(byte(0x03));  
   Wire.endTransmission(); 
 
-  //Read analog 10bit inputs 0&1
+  // Lees
   Wire.requestFrom(0x36, 4);   
   anin0 = Wire.read()&0x03;  
   anin0=anin0<<8;
