@@ -32,50 +32,47 @@ string Stoel::logic(map<string, Device*> dev)
 	timeStart = time(nullptr);
 
 	//massage function
-	if(s1->getValue() == "1" && alarm == NULL && cooldown == NULL) {
+	if(s1->getValue() == "2" && alarm == NULL && cooldown == NULL) { //wanneer de trilfunctie op "2" wordt gezet en het alarm en cooldown niet in gebruik zijn start de massage en wordt de 5 seconden cooldown gestart.
 		s = "4;1;5;1;33;1;";
-		alarm = timeStart + 5;
+		alarm = timeStart + 5; //tijdsduur van de massage.
 		cout << "Massage initiated \n";
 	}
 
-	if(timeStart > alarm && alarm != NULL){ //trill functie beindigen na 5 seconden
+	if(timeStart > alarm && alarm != NULL){ //Massage functie beindigen na 5 seconden
 		alarm = NULL;
 		s = "4;0;5;0;33;0;";
-		cooldown = timeStart + 5;
+		cooldown = timeStart + 5; //tijdsduur van de cooldown bepalen.
 		cout << "Massage ended \n";
 	}
 
 	if(timeStart > cooldown && cooldown !=NULL){ //5 seconden cooldown voor massage functie
-		cooldown = NULL;
+		cooldown = NULL; //cooldown is voorbij.
 		cout << "Massage cooldown ended \n";
 	}
 
 	//seisure detection
 	if(seizureTime == 0){
-		previousPressure = stoi(this->s1->getValue());
+		previousPressure = stoi(this->s1->getValue()); //eerste waarde meten van de druksensor
 		seizureTime++;
 	}
 
 	if(seizureTime >= 1){
-		previousPressure = stoi(this->s1->getValue());
-		//
-		currentPressure = stoi(this->s1->getValue());
-		if((currentPressure - previousPressure > 200 || currentPressure - previousPressure > -200) && seizureTime < 3){
+		currentPressure = stoi(this->s1->getValue()); //nieuwe waarde meten van de druksensor
+		if((currentPressure - previousPressure > 200 || currentPressure - previousPressure > -200) && seizureTime < 3){ //wanneer de nieuwe waarde ten opzichte van de basis waarde een afwijking heeft dan 200 wordt de seizureLevel verhoogt.
 			seizureLevel++;
 			previousPressure = currentPressure;
 		}
 		else{
-			seizureLevel = 0;
+			seizureLevel = 0; //wanders wordt het process herstart.
 			seizureTime = 0;
 		}
 
-		if(seizureLevel == 3 && seizureTime >= 3){
-			s = s + "33;1;";
+		if(seizureLevel == 3 && seizureTime >= 3){ //wanneer er meer dan 3 iteraties een groot verschil is er sprake van een beroerte.
+			s = s + "33;1;"; //seizure alarm wordt geactiveerd.
 			cout << "Seizure Detected";
 		}
 	}
-	//cout << "This is logic stoel" << endl;
-	//cout << " " << endl;
 
-	return s;
+	return s; //geef nieuwe actuator waarden door.
 }
+

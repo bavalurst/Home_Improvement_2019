@@ -11,7 +11,7 @@ using namespace std;
 class Stoel : public Device
 {
 private:
-    /* data */
+    /* Definieren van gebruikte variabelen in Stoel.cpp */
 	Actuator* a1;
 	Actuator* a2;
 	Sensor* s1;
