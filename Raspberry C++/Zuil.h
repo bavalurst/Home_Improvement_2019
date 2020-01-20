@@ -6,7 +6,7 @@
 class Zuil : public Device
 {
 private:
-    /* data */
+    /* Alle actuatoren en sensoren */
 	Actuator* a1;
 	Sensor* s1;
 	Sensor* s2;
