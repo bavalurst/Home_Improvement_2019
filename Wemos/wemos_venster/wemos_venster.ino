@@ -85,7 +85,7 @@ void readLdrAndRotaryEncoder()
   anin1 = Wire.read() & 0x03;    
   anin1 = anin1 << 8;                        
   anin1 = anin1 | Wire.read(); // rotary encoder
-  anin1 = anin1 / 25;
+  anin1 = anin1 / 110;
      
   itoa(anin1, buffer2, 10);
   itoa(anin0, buffer3, 10);
@@ -113,7 +113,7 @@ void turnOnLed()
     leds[0] = CRGB::Gray;
     leds[1] = CRGB::Gray;
     leds[2] = CRGB::Gray;
-    FastLED.setBrightness(Led.value/40*6);        // Felheid leds
+    FastLED.setBrightness(Led.value * 28);        // Felheid leds
     FastLED.show();
   }
   else{  
