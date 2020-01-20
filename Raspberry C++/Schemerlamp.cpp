@@ -58,7 +58,7 @@ string Schemerlamp::logic(map<string, Device*> dev) 		//This function is called 
 		AlarmReading.clear(); 					//clear the vector with readings,
 		fluctuations = 0;					//and clean the fluctuations.
 	}		
-	return s; //returns the value to be given to actuators, if needed.
+	return s; 							//returns the value to be given to actuators, if needed.
 }
 
 
