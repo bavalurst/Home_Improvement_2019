@@ -32,7 +32,7 @@ string Stoel::logic(map<string, Device*> dev)
 	timeStart = time(nullptr);
 
 	//massage function
-	if(s1->getValue() == "1" && alarm == NULL && cooldown == NULL) {
+	if(s1->getValue() == "2" && alarm == NULL && cooldown == NULL) {
 		s = "4;1;5;1;33;1;";
 		alarm = timeStart + 5;
 		cout << "Massage initiated \n";
@@ -79,3 +79,4 @@ string Stoel::logic(map<string, Device*> dev)
 
 	return s;
 }
+
