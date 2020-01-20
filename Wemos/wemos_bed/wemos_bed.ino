@@ -4,7 +4,7 @@
 #define PORT 3000 
 #include <cstring>
 
-// Network SSID and wachtwoord
+// network SSID and wachtwoord
 const char* ssid = "Groep 9";
 const char* password = "LekkerBelangrijk";
 
@@ -21,7 +21,7 @@ void turnOnLed();
 void readSwitch();
 void readRotaryEncoder();
 
-int c = 0;
+char c;
 
 unsigned int anin0 = 0;
 unsigned int anin1 = 0;
@@ -45,8 +45,11 @@ void setup() {
 
   Switch.key = "2";
   RotaryEncoder.key = "3";
+
+  c = 0
 }
- 
+
+// primaire loop
 void loop() {
   connectWithClient();
 }
@@ -59,90 +62,94 @@ void readSwitch()
   Wire.endTransmission();
   Wire.requestFrom(0x38, 1);   
   unsigned int inputs = Wire.read();   // hier wordt de switch uitgelezen
-  if (inputs % 2 == 0){
+  if (inputs % 2 == 0){  // controleer of de switch is ingedrukt
      inputs = 0;
   }
   else {
     inputs = 1;
   }
-  //Serial.print("Digital in: ");
-  //Serial.println(inputs&0x0F);
-  //Serial.println(inputs);
+
   itoa(inputs, buffer1, 10);          // zet de integer waarde van de switch om naar een string, zodat deze over de socket verbinding gestuurd kan worden
 }
 
+// deze functie zet de led op het bed aan
 void turnOnLed()
 {
   
-  // Begin transmissie met leds
+  // begin transmissie met leds
   Wire.beginTransmission(0x38);
   Wire.write(byte(0x03));
   Wire.write(byte(0x0F));
   Wire.endTransmission();
 
-  // Zet led op basis van ontvangen state van de PI
+  // zet led op basis van ontvangen value van de PI
   Wire.beginTransmission(0x38);
   Wire.write(byte(0x01));
-  Wire.write(byte(c - '0' << 4)); // zet led op basis van ontvangen state
-  Serial.print("Waarde lampje: ");
-  Serial.println(c - '0');
+  Wire.write(byte(c - '0' << 4)); // zet led op basis van ontvangen value
   Wire.endTransmission();
 }
 
+// deze functie leest de druk sensor op het bed uit
 void readRotaryEncoder()
 {
-  // Begin transmissie met leds 
+  // begin transmissie met druk sensor 
   Wire.beginTransmission(0x36);
   Wire.write(byte(0xA2));          
   Wire.write(byte(0x03));  
   Wire.endTransmission(); 
 
-  // Lees
+  // lees druk sensor van het bed uit
   Wire.requestFrom(0x36, 4);   
   anin0 = Wire.read()&0x03;  
   anin0=anin0<<8;
   anin0 = anin0|Wire.read();  
-  Serial.print("analog in 0: ");
-  Serial.println(anin0);   
-  itoa(anin0, buffer2, 10);
+
+  itoa(anin0, buffer2, 10); // zet de integer waarde van de switch om naar een string, zodat deze over de socket verbinding gestuurd kan worden
 }
 
+// deze functie verbind met de pi en leest de data van de pi uit, vervolgens word de sensor data teruggestuurd
 void connectWithClient()
 {
   WiFiClient client = wifiServer.available();
-  
+
+  // controleer of er verbinding is met de pi
   if (client) {
- 
+    // deze while loop uitvoeren zolang de pi verbonden is
     while (client.connected()) {
- 
-      while (client.available()>0) {
+      delay(20);
+      // lees de pi uit als er data is
+      while (client.available()>0) {  
         c = client.read();
-        Serial.print(c);
+        c = 0;
       }
-      turnOnLed();
+
       readSwitch();
       readRotaryEncoder();
 
       Switch.value = buffer1;
       RotaryEncoder.value = buffer2;
-      sensorString = Switch.key + EndOfNumber + Switch.value + EndOfNumber + RotaryEncoder.key + EndOfNumber + RotaryEncoder.value + EndOfNumber;
+      sensorString = Switch.key + EndOfNumber + Switch.value + EndOfNumber + RotaryEncoder.key + EndOfNumber + RotaryEncoder.value + EndOfNumber; // string die teruggestuurd word naar de pi
 
       char writebuffer[50];
       strcpy(writebuffer, sensorString.c_str());
-      client.write(writebuffer);
+
+      client.write(writebuffer);  // deze functie stuurt de sensor data terug naar de pi
+
       delay(10);
     }
-    client.stop();
+    client.stop(); // stop de verbinding met de pi, zodra de sensor data verzonden is
 
-    Serial.println(sensorString);
+    turnOnLed();
+
     Serial.println(" ");
     Serial.println("Client disconnected");
  }
 }
 
+// deze functie initialiseert de WiFi instellingen van de Wemos
 void initWiFi()
 {
-  // Connect WiFi
+  // verbind met WiFi
   Serial.println();
   Serial.println();
   Serial.print("Connecting to ");
@@ -160,7 +167,7 @@ void initWiFi()
   Serial.println("");
   Serial.println("WiFi connected");
  
-  // Print the IP address
+  // print het IP address
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
 

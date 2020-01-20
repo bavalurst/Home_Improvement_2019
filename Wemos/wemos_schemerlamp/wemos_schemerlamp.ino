@@ -10,11 +10,13 @@
 #define I2C_SDL    D1
 #define I2C_SDA    D2
 
-// Network SSID
+// network SSID and wachtwoord
 const char* ssid = "Groep 9";
 const char* password = "LekkerBelangrijk";
 
 WiFiServer wifiServer(PORT);
+
+// statische IP
 IPAddress ip(10, 42, 0, 13);
 IPAddress GW(10, 42, 0, 1);
 IPAddress netmask(255, 255, 255, 0);
@@ -25,7 +27,7 @@ void turnOnLed();
 void readSwitch();
 void readRotaryEncoder();
 
-int c = 0;
+char c;
 unsigned int anin0 = 0;
 unsigned int anin1 = 0;
 
@@ -40,8 +42,8 @@ struct Sensor {
 }Motion;
 
 struct Actuator {
-  int key = 0;
-  int value = 0;
+  int key;
+  int value;
 }Led;
 
 CRGB leds[NUM_LEDS];
@@ -55,35 +57,40 @@ void setup() {
 
   FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
 
+  // initialiseer WiFi instellingen
   initWiFi();
 
+  // ken key values toe aan actuatoren en sensoren
   Led.key = 5;
   Motion.key = 9;
+
+  Led.value = 0;
 }
- 
+
+// primaire loop   
 void loop() {
   connectWithClient();
 }
-
+  
+// deze functie leest de motion sensor op de schemerlamp uit
 void readMotionSensor()
 {
   Wire.beginTransmission(0x38); 
   Wire.write(byte(0x00));      
   Wire.endTransmission();
   Wire.requestFrom(0x38, 1);   
-  unsigned int inputs = Wire.read();  
-  if (inputs % 2 == 0){
+  unsigned int inputs = Wire.read();  // hier wordt de switch uitgelezen
+  if (inputs % 2 == 0) // controleer of de switches zijn ingedrukt
      inputs = 0;
   }
   else {
     inputs = 1;
   }
-  //Serial.print("Digital in: ");
-  //Serial.println(inputs&0x0F);
-  //Serial.println(inputs);
-  itoa(inputs, buffer1, 10);
+ 
+  itoa(inputs, buffer1, 10); // zet de integer waarde van de switch om naar een string, zodat deze over de socket verbinding gestuurd kan worden
 }
 
+// deze functie zet de led van de schemerlamp aan
 void turnOnLed()
 {
   if (c - '0' == 1) {
@@ -98,36 +105,52 @@ void turnOnLed()
   }
 }
 
+// deze functie verbind met de pi en leest de data van de pi uit, vervolgens word de sensor data teruggestuurd
 void connectWithClient()
 {
   WiFiClient client = wifiServer.available();
   
   if (client) {
- 
+    
+    // deze while loop uitvoeren zolang de pi verbonden is
     while (client.connected()) {
- 
+      delay(20);
+      // lees de pi uit als er data is
       while (client.available()>0) {
         c = client.read();
+        Led.value = 0;
+        // deze if statement scheid de key van de value
+        if(c - '0' == 5)
+        {
+          c = client.read();
+          Led.value = c - '0';
+        }
       }
-      turnOnLed();
+      
       readMotionSensor();
+      
       Motion.value = buffer1;
-      sensorString = Motion.key + EndOfNumber + Motion.value + EndOfNumber;
+      sensorString = Motion.key + EndOfNumber + Motion.value + EndOfNumber; // string die teruggestuurd word naar de pi
 
       char writebuffer[50];
       strcpy(writebuffer, sensorString.c_str());
-      client.write(writebuffer);
+
+      client.write(writebuffer); // deze functie stuurt de sensor data terug naar de pi
       delay(10);
     }
-    client.stop();
+    client.stop(); // stop de verbinding met de pi, zodra de sensor data verzonden is
+
+    turnOnLed();
+
     Serial.println(" ");
     Serial.println("Client disconnected");
  }
 }
 
+// deze functie initialiseert de WiFi instellingen van de Wemos
 void initWiFi()
 {
-  // Connect WiFi
+  // verbind met WiFi
   Serial.println();
   Serial.println();
   Serial.print("Connecting to ");
@@ -145,7 +168,7 @@ void initWiFi()
   Serial.println("");
   Serial.println("WiFi connected");
  
-  // Print the IP address
+  // print het IP address
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
 
