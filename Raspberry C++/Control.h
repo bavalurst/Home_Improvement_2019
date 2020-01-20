@@ -5,8 +5,10 @@
 #include "Bed.h"
 #include "Stoel.h"
 #include "Zuil.h"
+#include "Deur.h"
 #include "Schemerlamp.h"
 #include "Fridge.h"
+#include "Venster.h"
 #include "Database.h"
 #include "Actuator.h"
 #include <iostream>

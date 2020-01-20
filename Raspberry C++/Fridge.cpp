@@ -23,21 +23,21 @@ string Fridge::logic(map<string, Device*> dev)
 {
 	string s = "";
 
-	if(stoi(this->s1->getValue()) > 300 && stoi(this->s2->getValue()) == 1){
-		s = s + "18;1;";
+	if(stoi(this->s1->getValue()) > 300 && stoi(this->s2->getValue()) == 1){	// als de temp onder een waarde ligt en de deur dicht is
+		s = s + "18;1;";							// koeling+ventilator aan
 		cout << "fridge on" << endl;
-		deurOpen = 0;
+		deurOpen = 0;								
 		cout << deurOpen << endl;
 	}
 
-	if(stoi(this->s2->getValue()) ==  0 && deurOpen == 0){
+	if(stoi(this->s2->getValue()) ==  0 && deurOpen == 0){				// als de deur open gaat
 		timeStart = time(nullptr);
 		cout << "huidige tijd" << timeStart << endl;
 		deurOpen = 1;
 	}
 
-	if(time(nullptr) >= (timeStart + 10) && deurOpen == 1){
-		s = s + "18;0;";
+	if(time(nullptr) >= (timeStart + 10) && deurOpen == 1){				// als de deur open is voor 10s
+		s = s + "18;0;34;1;";							// zet de ventilator en koeling uit, stuur een melding naar de bewaker
 		cout << "fridge off" << endl;
 	}
 

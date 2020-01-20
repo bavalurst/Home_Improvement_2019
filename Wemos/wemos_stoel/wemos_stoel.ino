@@ -19,7 +19,7 @@ void turnOnLed();
 void readSwitch();
 void readRotaryEncoder();
 
-int c = 0;
+char c = 0;
 unsigned int anin0 = 0;
 unsigned int anin1 = 0;
 
@@ -121,6 +121,8 @@ void connectWithClient()
     while (client.connected()) {
       delay(20);
       while (client.available()>0) {
+        Led.value = 0;
+        Tril.value = 0;
         c = client.read();
         Serial.print("C1 : ");
         Serial.println(c);
