@@ -26,7 +26,7 @@ string Venster::logic(map<string, Device*> dev)
 {
 	string s = "";
 	if(stoi(this->s2->getValue()) <= 400){
-		s = s + "15;1;";
+		s = s + "15;1;26;1;";
 		cout << "turning window on" << endl;
 	}
 	else{
