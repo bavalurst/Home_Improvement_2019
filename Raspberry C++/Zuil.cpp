@@ -10,7 +10,8 @@ Zuil::Zuil(char* ip) : Device(ip) {
 	addSensor(s1);
 	s2 = new Sensor("13", "0");
 	addSensor(s2);
-
+	//test
+			
 }
 
 Zuil::~Zuil() {
