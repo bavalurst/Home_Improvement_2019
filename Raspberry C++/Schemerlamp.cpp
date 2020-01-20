@@ -51,7 +51,7 @@ string Schemerlamp::logic(map<string, Device*> dev)
 
 			if (fluctuations >= 3) {
 				cout << "Alarm aan! Meneer sterft." << endl;
-				s = s + "10;1;"; //website popup id
+				s = s + "10;1;31;1;"; //website popup id
 		}
 
 		}
