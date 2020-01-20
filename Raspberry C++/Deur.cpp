@@ -41,6 +41,7 @@ Deur::~Deur() {
 string Deur::logic(map<string, Device*> dev)
 {
 
+<<<<<<< HEAD
 PIN = "1234"; //PIN code voor keypad defineren.
 
 
@@ -52,6 +53,19 @@ else{
 	incorrectPinCount = a8->getValue(); //huidige foute pogingen.
 	incorrectPinCount++; //foutepogingen verhogen.
 	s = s + "29;1;38;incorrectPinCount;"; //alert aan de bewaker op de client.php tonen.
+=======
+PIN = 1234;
+
+
+if(a5->getValue() == "1" && a7->getValue() == PIN) {
+	s = s + "24;1;27;0;28;0";
+	incorrectPinCount = 0;
+}
+else{
+	incorrectPinCount = a8->getValue();
+	incorrectPinCount++;
+	s = s + "29;1;38;incorrectPinCount;";
+>>>>>>> bbe3ea851ba00163bfa6e6f34f9cb53c8858f9c6
 }
 
 if(a2->getValue() == "1" && a3->getValue() != "1") { //Wanneer op de Deurknop buiten wordt gedrukt, gaat de deur open.
@@ -65,18 +79,31 @@ if(a2->getValue() == "0" && a3->getValue() != "0" ) { //Deur sluiten.
 
 	cout << "Deur gaat dicht. \n";
 }
+<<<<<<< HEAD
 if((a1->getValue() == "1" || a2->getValue() == "1")&& a7->getValue() == "1" ) { //Wanneer Brandalarm afgaat openen beide deurknoppen de deur.
+=======
+if((a1->getValue() == "1" || a2->getValue() == "1")&& a7->getValue() == "1" ) { //Wanneer Brandalarm afgaat openen beide deurknoppen de deur
+>>>>>>> bbe3ea851ba00163bfa6e6f34f9cb53c8858f9c6
 	s = s + "24;0;";
 
 	cout << "Brandalarm is afgegaan, deur gaat open.\n";
 }
 
+<<<<<<< HEAD
 if(a0->getValue() < 400 && (a2->getValue() == "1" && a2->getValue() != "1")){ //Wanneer het nacht is (lichtintensitiet < 400) gaat snachts de buiten lamp aan voor 6 seconden.
 	s = s + "39;1;23;1"; //lED aanzetten en bewaker inlichten.
 	timeStart = time(nullptr); //timer starten.
 
 }
 if( timeStart != NULL) { //wanneer 6 seconden zijn verstreken gaat het lampje uit, de melding blijft voor de bewaker staan.
+=======
+if(a0->getValue() < 400 && (a2->getValue() == "1" && a2->getValue() != "1")){
+	s = s + "39;1;23;1";
+	timeStart = time(nullptr);
+
+}
+if( timeStart != NULL) {
+>>>>>>> bbe3ea851ba00163bfa6e6f34f9cb53c8858f9c6
 	if (time(nullptr) >= timeStart + 6){
 			s = s + "39;1;23;0";
 			timeStart = NULL;

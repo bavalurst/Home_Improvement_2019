@@ -32,7 +32,11 @@ string Stoel::logic(map<string, Device*> dev)
 	timeStart = time(nullptr);
 
 	//massage function
+<<<<<<< HEAD
 	if(s1->getValue() == "2" && alarm == NULL && cooldown == NULL) { //wanneer de trilfunctie op "2" wordt gezet en het alarm en cooldown niet in gebruik zijn start de massage en wordt de 5 seconden cooldown gestart.
+=======
+	if(s1->getValue() == "2" && alarm == NULL && cooldown == NULL) {
+>>>>>>> bbe3ea851ba00163bfa6e6f34f9cb53c8858f9c6
 		s = "4;1;5;1;33;1;";
 		alarm = timeStart + 5; //tijdsduur van de massage.
 		cout << "Massage initiated \n";
