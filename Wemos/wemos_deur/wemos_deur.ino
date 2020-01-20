@@ -10,6 +10,9 @@ const char* ssid = "Wij gebruiken een IDE";
 const char* password = "Mijnarends";
 
 WiFiServer wifiServer(PORT);
+IPAddress ip(10, 42, 0, 254);
+IPAddress GW(10, 42, 0, 1);
+IPAddress netmask(255, 255, 255, 0);
 
 void initWiFi();
 void connectWithClient();
@@ -17,7 +20,7 @@ void turnOnLeds();
 void turnOnServo();
 void readSwitches();
 
-int c = 0;
+char c = 0;
 unsigned int anin0 = 0;
 unsigned int anin1 = 0;
 
@@ -34,12 +37,12 @@ Servo myservo;
 
 struct Sensor {
   String key;
-  String value; 
+  String value = "0"; 
 }switchBuiten, switchBinnen;
 
 struct Actuator {
   int key;
-  int value; 
+  unsigned int value = 0; 
 }ledBuiten, ledBinnen, servoDeur;
 
 void setup() {
@@ -48,6 +51,7 @@ void setup() {
   delay(10);
 
   initWiFi();
+  
 
   myservo.attach(D5);
   myservo.write(pos);
@@ -57,11 +61,14 @@ void setup() {
   ledBuiten.key = 23;
   ledBinnen.key = 22;
   servoDeur.key = 24;
+
+  ledBinnen.value = 0;
+  ledBuiten.value = 0;
+  servoDeur.value = 0;
 }
  
 void loop() {
   connectWithClient();
-  readSwitches();
 }
 
 void readSwitches()
@@ -102,6 +109,22 @@ void turnOnLeds()
   // Zet led op basis van ontvangen state van de PI
   Wire.beginTransmission(0x38);
   Wire.write(byte(0x01));
+  Serial.print("Led buiten + Led binnen : ");
+  Serial.println(ledBuiten.value + ledBinnen.value);
+  Serial.print("Led buiten: ");
+  Serial.println(ledBuiten.value);
+  Serial.print("Led binnen : ");
+  Serial.println(ledBinnen.value);
+//  if((ledBuiten + ledBinnen) == -48)
+//  {
+//   led = 0;
+//  }else if(ledBuiten + ledBinnen) == -49)
+//  (
+//    led = 1
+//  }else if(ledBuiten + ledBinnen) == -50)
+//  {
+//    led = 2
+//  }
   Wire.write(byte(ledBuiten.value + ledBinnen.value << 4)); // zet led op basis van ontvangen state
   Wire.endTransmission();
 }
@@ -114,6 +137,8 @@ void turnOnServo()
       myservo.write(pos);                        
       delay(10);
     }
+    ledBinnen.value = 1;
+    servoDeur.value = 3; 
   }
    // deur sluiten na ontvangen 0
   if(servoDeur.value == 0)
@@ -122,6 +147,8 @@ void turnOnServo()
      myservo.write(pos);
      delay(10);
      }  
+     ledBinnen.value = 0;
+     servoDeur.value = 3; 
   }
 }
 
@@ -133,14 +160,46 @@ void connectWithClient()
   if (client) {
  
     while (client.connected()) {
- 
+      delay(20);
       while (client.available()>0) {
         c = client.read();
-        Serial.print(c);
+        ledBinnen.value = 0;
+        ledBuiten.value = 0;
+        servoDeur.value = 0;
+        Serial.print("C1: ");
+        Serial.println(c);
+        if(c - '0' == 2)
+        {
+          c = client.read();
+          Serial.print("C2: ");
+          Serial.println(c);
+          if(c - '0' == 4)
+          {
+            c = client.read();
+            Serial.print("C3: ");
+            Serial.println(c);
+            servoDeur.value = c - '0';
+            Serial.print("servoDeur: ");
+            Serial.println(servoDeur.value);
+            turnOnServo();
+            break;
+          }else if(c - '0' == 3)
+          {
+            c = client.read();
+            Serial.print("C4: ");
+            Serial.println(c);
+            ledBuiten.value = c - '0';
+          }else if(c - '0' == 2)
+          {
+            c = client.read();
+            Serial.print("C5: ");
+            Serial.println(c);
+            ledBinnen.value = c - '0';
+          }
+        }
       }
-      //turnOnLeds();
-      //turnOnServo();
-      //readSwitches();
+      
+      readSwitches();
 
       switchBinnen.value = buffer1;
       switchBuiten.value = buffer2;
@@ -152,6 +211,8 @@ void connectWithClient()
       delay(10);
     }
     client.stop();
+
+    turnOnLeds();
 
     Serial.println(sensorString);
     Serial.println(" ");
@@ -168,6 +229,7 @@ void initWiFi()
   Serial.println(ssid);
   WiFi.hostname("Wemos");
   WiFi.begin(ssid, password);
+  WiFi.config(ip, GW, netmask, GW);
  
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);

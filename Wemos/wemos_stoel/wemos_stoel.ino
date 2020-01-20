@@ -83,9 +83,13 @@ void turnOnLedAndTril()
   // Zet led op basis van ontvangen state van de PI
   Wire.beginTransmission(0x38);
   Wire.write(byte(0x01));
+  Serial.print("Led + Buzzer : ");
+  Serial.println(Led.value + Tril.value);
+  Serial.print("Led Value : ");
+  Serial.println(Led.value);
+  Serial.print("Buzzer Value : ");
+  Serial.println(Tril.value);
   Wire.write(byte((Led.value + Tril.value) << 4)); // zet led op basis van ontvangen state
-  Serial.print("Waarde lampje: ");
-  Serial.println((Led.value + Tril.value));
   Wire.endTransmission();
 }
 
@@ -101,9 +105,7 @@ void readRotaryEncoder()
   Wire.requestFrom(0x36, 4);   
   anin0 = Wire.read()&0x03;  
   anin0=anin0<<8;
-  anin0 = anin0|Wire.read();  
-  Serial.print("analog in 0: ");
-  Serial.println(anin0);   
+  anin0 = anin0|Wire.read();     
   itoa(anin0, buffer2, 10);
 }
 
@@ -114,23 +116,28 @@ void connectWithClient()
   if (client) {
  
     while (client.connected()) {
- 
+      delay(20);
       while (client.available()>0) {
         c = client.read();
-        
+        Serial.print("C1 : ");
+        Serial.println(c);
         if(c - '0' == 5)
         {
           c = client.read();
+          Serial.print("C2 : ");
+          Serial.println(c);
           Led.value = c - '0'; 
-        }
-
-        if(c - '0' == 4)
+        }else if(c - '0' == 4)
         {
           c = client.read();
+          Serial.print("C3 : ");
+          Serial.println(c);
           Tril.value = c - '0'; 
         }
+
+        turnOnLedAndTril();
       }
-      turnOnLedAndTril();
+      
       readSwitch();
       readRotaryEncoder();
 
