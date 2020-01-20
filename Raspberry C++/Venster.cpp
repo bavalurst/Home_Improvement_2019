@@ -25,16 +25,16 @@ Venster::~Venster() {
 string Venster::logic(map<string, Device*> dev)
 {
 	string s = "";
-	if(stoi(this->s2->getValue()) <= 400){
-		s = s + "15;1;22;1;";
+	if(stoi(this->s2->getValue()) <= 400){		// als het donker is
+		s = s + "15;1;22;1;";			// sluit het venster en zet de binnenlamp v/d deur aan
 		cout << "turning window on" << endl;
 	}
 	else{
-		s = s + "15;0;";
+		s = s + "15;0;";			//venster open
 	}
 
 	string LedValue = (this->s1->getValue());
-	s = s + "14;" + LedValue + ";";
+	s = s + "14;" + LedValue + ";";			// felheid van de LED strip staat gelijk aan de waarde van de dimmer
 
 
 	return s;
