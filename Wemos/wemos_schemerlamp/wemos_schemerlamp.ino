@@ -80,7 +80,7 @@ void readMotionSensor()
   Wire.endTransmission();
   Wire.requestFrom(0x38, 1);   
   unsigned int inputs = Wire.read();  // hier wordt de switch uitgelezen
-  if (inputs % 2 == 0) // controleer of de switches zijn ingedrukt
+  if (inputs % 2 == 0){ // controleer of de switches zijn ingedrukt
      inputs = 0;
   }
   else {
@@ -93,7 +93,7 @@ void readMotionSensor()
 // deze functie zet de led van de schemerlamp aan
 void turnOnLed()
 {
-  if (c - '0' == 1) {
+  if (Led.value == 1) {
     // lamp aan als er beweging is
     leds[0] = CRGB::Gray;
     FastLED.show();

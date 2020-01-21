@@ -11,7 +11,7 @@ const char* password = "LekkerBelangrijk";
 WiFiServer wifiServer(PORT);
 
 // statische IP
-IPAddress ip(10, 42, 0, 10);
+IPAddress ip(10, 42, 0, 14);
 IPAddress GW(10, 42, 0, 1);
 IPAddress netmask(255, 255, 255, 0);
 
@@ -46,7 +46,7 @@ void setup() {
   Switch.key = "2";
   RotaryEncoder.key = "3";
 
-  c = 0
+  c = 0;
 }
 
 // primaire loop
@@ -75,7 +75,6 @@ void readSwitch()
 // deze functie zet de led op het bed aan
 void turnOnLed()
 {
-  
   // begin transmissie met leds
   Wire.beginTransmission(0x38);
   Wire.write(byte(0x03));
@@ -120,9 +119,9 @@ void connectWithClient()
       // lees de pi uit als er data is
       while (client.available()>0) {  
         c = client.read();
-        c = 0;
       }
-
+      
+      turnOnLed();
       readSwitch();
       readRotaryEncoder();
 
@@ -138,8 +137,6 @@ void connectWithClient()
       delay(10);
     }
     client.stop(); // stop de verbinding met de pi, zodra de sensor data verzonden is
-
-    turnOnLed();
 
     Serial.println(" ");
     Serial.println("Client disconnected");

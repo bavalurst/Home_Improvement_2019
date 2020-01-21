@@ -21,7 +21,7 @@ void turnOnLed();
 void readSwitch();
 void readPressure();
 
-char c;
+char c = 0;
 unsigned int anin0 = 0;
 unsigned int anin1 = 0;
 
@@ -56,6 +56,11 @@ void setup() {
 
   Led.value = 0;
   Tril.value = 0;
+
+  pinMode(D5, OUTPUT);
+  digitalWrite(D5, LOW);
+
+  
 }
 
 // primaire loop   
@@ -93,7 +98,11 @@ void turnOnLedAndTril()
   // zet actuatoren op basis van ontvangen value van de pi
   Wire.beginTransmission(0x38);
   Wire.write(byte(0x01));
-  Wire.write(byte((Led.value + Tril.value) << 4)); // zet led op basis van ontvangen value
+  Serial.print("Led 2: ");
+  Serial.println(Led.value);
+  Serial.print("Tril 2: ");
+  Serial.println(Tril.value);
+  Wire.write(byte(Led.value + Tril.value << 4)); // zet led op basis van ontvangen value
   Wire.endTransmission();
 }
 
@@ -124,24 +133,32 @@ void connectWithClient()
     // deze while loop uitvoeren zolang de pi verbonden is
     while (client.connected()) {
       delay(20);
-      // lees de pi uit als er data is
       while (client.available()>0) {
         c = client.read();
         Led.value = 0;
         Tril.value = 0;
-
+        Serial.print("Led 1: ");
+        Serial.println(Led.value);
+        Serial.print("Tril 1: ");
+        Serial.println(Tril.value);
+        Serial.print("C1: ");
+        Serial.println(c);
         // deze rij if en else statements zorgen ervoor dat de key en value gescheiden worden
         if(c - '0' == 5)
         {
           c = client.read();
-          Led.value = c - '0'; 
+          Serial.print("C2: ");
+          Serial.println(c);
+          Led.value = c - '0';
         }else if(c - '0' == 4)
         {
           c = client.read();
-          Tril.value = c - '0'; 
+          Serial.print("C3: ");
+          Serial.println(c);
+          Tril.value = c - '0';
         }
       }
-      
+  
       readSwitch();
       readPressure();
 
