@@ -76,7 +76,7 @@ void readSwitch()
   Wire.endTransmission();
   Wire.requestFrom(0x38, 1);   
   unsigned int inputs = Wire.read();  // hier wordt de switch uitgelezen
-  if (inputs % 2 == 0) // controleer of de switches zijn ingedrukt
+  if (inputs % 2 == 0){ // controleer of de switches zijn ingedrukt
      inputs = 0;
   }
   else {
@@ -179,7 +179,7 @@ void connectWithClient()
     turnOnCooler();
     
     Serial.println(" ");
-    Serial.println("Client disconnected")
+    Serial.println("Client disconnected");
  }
 }
 
