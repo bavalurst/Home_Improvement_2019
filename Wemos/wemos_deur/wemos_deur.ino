@@ -126,22 +126,12 @@ void turnOnServo()
 {
   // deur openen als knop aan de buitenkant wordt ingedrukt
   if (servoDeur.value == 1) {                    
-    for (pos = 79; pos >= -30; pos -= 1) {        
-      myservo.write(pos);                        
-      delay(10);
-    }
-    ledBinnen.value = 1;
-    servoDeur.value = 3; 
-  }
-   // deur sluiten na ontvangen 0
-  if(servoDeur.value == 0)
+    pos = -30;    
+    myservo.write(pos);                        
+  }else if(servoDeur.value == 0)
   {
-     for (pos = -30; pos <= 79; pos += 1) {        // deur sluiten na ontvangen 0
+     pos = 79;
      myservo.write(pos);
-     delay(10);
-     }  
-     ledBinnen.value = 0;
-     servoDeur.value = 3; 
   }
 }
 
@@ -161,7 +151,7 @@ void connectWithClient()
         c = client.read();
         ledBinnen.value = 0;
         ledBuiten.value = 0;
-        servoDeur.value = 0;
+        //servoDeur.value = 0;
 
         // deze rij if en else statements zorgen ervoor dat de key en value gescheiden worden
         if(c - '0' == 2)  
