@@ -46,7 +46,7 @@ void setup() {
   Switch.key = "2";
   RotaryEncoder.key = "3";
 
-  c = 0
+  c = 0;
 }
 
 // primaire loop
