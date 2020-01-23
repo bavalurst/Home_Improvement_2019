@@ -190,7 +190,6 @@ void initWiFi()
   Serial.print("Connecting to ");
   Serial.println(ssid);
   WiFi.hostname("Wemos");
-  WiFi.begin(ssid, password);
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
