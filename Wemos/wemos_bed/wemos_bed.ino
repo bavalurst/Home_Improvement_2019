@@ -11,7 +11,7 @@ const char* password = "LekkerBelangrijk";
 WiFiServer wifiServer(PORT);
 
 // statische IP
-IPAddress ip(10, 42, 0, 14);
+IPAddress ip(10, 42, 0, 10);
 IPAddress GW(10, 42, 0, 1);
 IPAddress netmask(255, 255, 255, 0);
 
