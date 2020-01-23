@@ -83,8 +83,9 @@ void Control::compareDatabaseToDevice()
         	vector<string> stringresult;
         	stringresult = parseMessage(SaveThis);
         	for(int i=0; i < stringresult.size(); i+=2) {
-        		cout << "Writing to: " << stringresult[i];
-        		cout << " with value: " << stringresult[i+1] << endl;
+        		/*cout << "Writing to: " << stringresult[i];
+        		cout << " with value: " << stringresult[i+1] << endl;*/
+			dat->createLog("Writing to: " + stringresult[i] + " with value: " + stringresult[i + 1] + "\n"); //create log
         		dat->writeActuatorData(stringresult[i], stringresult[i+1]); //To change actuator values, they will be written in the database. The next loop will catch it, and send the proper message.
         	}
 
