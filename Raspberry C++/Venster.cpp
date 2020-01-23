@@ -26,7 +26,6 @@ Venster::~Venster() {
 string Venster::logic(map<string, Device*> dev)
 {
 	string s = "";
-	map<string, Actuator*> acts = dev.at("Venster")->getActuators();
 	
 	if(stoi(this->s2->getValue()) <= 400){		// als het donker is
 		s = s + "15;1;22;1;";			// sluit het venster en zet de binnenlamp v/d deur aan
