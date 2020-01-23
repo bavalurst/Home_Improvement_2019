@@ -6,6 +6,7 @@ Venster::Venster(char* ip) : Device(ip) {
 	addActuator("14", a1);
 	a2 = new Actuator("15", "0");	// window 		waarde 1 of 0
 	addActuator("15", a2);
+	
 	s1 = new Sensor("16", "0");		// dimmer
 	addSensor(s1);
 	s2 = new Sensor("17", "0");		// LDR			onder 400 uit
@@ -25,11 +26,14 @@ Venster::~Venster() {
 string Venster::logic(map<string, Device*> dev)
 {
 	string s = "";
+	map<string, Actuator*> acts = dev.at("Venster")->getActuators();
+	
 	if(stoi(this->s2->getValue()) <= 400){		// als het donker is
 		s = s + "15;1;22;1;";			// sluit het venster en zet de binnenlamp v/d deur aan
 		cout << "turning window on" << endl;
 	}
-	else{
+	
+	else if(this->s2->getValue()) > 400 && this->a2->getValue() != 2){
 		s = s + "15;0;";			//venster open
 	}
 
@@ -39,4 +43,3 @@ string Venster::logic(map<string, Device*> dev)
 
 	return s;
 }
-
