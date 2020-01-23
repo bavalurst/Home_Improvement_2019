@@ -192,12 +192,12 @@ void initWiFi()
   WiFi.hostname("Wemos");
   WiFi.begin(ssid, password);
   WiFi.mode(WIFI_STA);
-  WiFi.config(ip, GW, netmask, GW);
- 
+  WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
+  WiFi.config(ip, GW, netmask, GW);
   
   Serial.println("");
   Serial.println("WiFi connected");
