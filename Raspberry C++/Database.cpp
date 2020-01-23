@@ -3,6 +3,12 @@
 Database::Database() {
 	this->refreshSensorData(); 					//read and convert json data files on class creation
 	this->refreshActuatorData();
+
+	time_t CurrentTime = time(nullptr);
+	stringtime << asctime(localtime(&CurrentTime));
+	ofstream logFile("logfile.txt");
+	logFile << "Current Time: " << stringtime.str() << endl;
+	logFile.close();
 }
 
 Database::~Database() {}
@@ -52,6 +58,26 @@ void Database::writeActuatorData(string key, string value)  { //writes data to a
 		//write new values to file
 	writer.write(Out, actuator);
 	Out.close();
+
+
+}
+
+void Database::createLog(string message) {
+	time_t CurrentTime = time(nullptr);
+	stringstream stringtimecurrent;
+	stringtimecurrent << asctime(localtime(&CurrentTime));
+
+	cout << "Writing: " << message << "To filename: logfile.txt" << endl;
+
+	ofstream logFile("logfile.txt", ios::app);
+
+	if(logFile.is_open()){
+		string stringmessage = stringtimecurrent.str() + ": " + message + "\n";
+		logFile << stringmessage << endl;
+		logFile.close();
+	} else {
+		cout << "Unable to open file";
+	}
 
 
 }
