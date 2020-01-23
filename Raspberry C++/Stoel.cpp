@@ -6,7 +6,7 @@ Stoel::Stoel(char* ip) : Device(ip) {
 	alarm = NULL;
 	cooldown = NULL;
 	oneSecond = timeStart + 1;
-	a1 = new Actuator("4", "0"); //Actuator voor trillfunctie
+	a1 = new Actuator("4", "0"); //Actuator voor trilfunctie
 	addActuator("4", a1);
 	a2 = new Actuator("5", "0"); //Actuator voor LED
 	addActuator("5", a1);
@@ -32,15 +32,15 @@ string Stoel::logic(map<string, Device*> dev)
 	timeStart = time(nullptr);
 
 	//massage function
-	if(s1->getValue() == "2" && alarm == NULL && cooldown == NULL) { //wanneer de trilfunctie op "2" wordt gezet en het alarm en cooldown niet in gebruik zijn start de massage en wordt de 5 seconden cooldown gestart.
-		s = "4;1;5;1;33;1;";
+	if((s2->getValue() == "1" || a1->getValue() == "1") && alarm == NULL && cooldown == NULL) { //wanneer de trilfunctie op "2" wordt gezet en het alarm en cooldown niet in gebruik zijn start de massage en wordt de 5 seconden cooldown gestart.
+		s = s + "4;2;33;1;";
 		alarm = timeStart + 5; //tijdsduur van de massage.
 		cout << "Massage initiated \n";
 	}
 
 	if(timeStart > alarm && alarm != NULL){ //Massage functie beindigen na 5 seconden
 		alarm = NULL;
-		s = "4;0;5;0;33;0;";
+		s = s + "4;0;33;0;";
 		cooldown = timeStart + 5; //tijdsduur van de cooldown bepalen.
 		cout << "Massage ended \n";
 	}
@@ -51,27 +51,34 @@ string Stoel::logic(map<string, Device*> dev)
 	}
 
 	//seisure detection
-	if(seizureTime == 0){
-		previousPressure = stoi(this->s1->getValue()); //eerste waarde meten van de druksensor
-		seizureTime++;
-	}
-
-	if(seizureTime >= 1){
-		currentPressure = stoi(this->s1->getValue()); //nieuwe waarde meten van de druksensor
-		if((currentPressure - previousPressure > 200 || currentPressure - previousPressure > -200) && seizureTime < 3){ //wanneer de nieuwe waarde ten opzichte van de basis waarde een afwijking heeft dan 200 wordt de seizureLevel verhoogt.
-			seizureLevel++;
-			previousPressure = currentPressure;
-		}
-		else{
-			seizureLevel = 0; //wanders wordt het process herstart.
-			seizureTime = 0;
+	if (seizureLevel == -1){ // initialisatiefase. Zie Bed.h; seizurelevel begint op -1
+			lastAct = stoi(this->s1->getValue()); // De huidige waarde van de druksensor wordt nu opgeslagen in "lastAct" (vage naam)
+			seizureLevel = 0; // seizurelevel wordt op 0 gezet.
+			s = s + "31;0;"; // Hierin wordt aan het bericht s de waardes 31;0; toegevoerd.
+			// Het bericht s wordt in de functie gereturned en in control worden de juisteren actuatoren aangestuurd.
+			// In dit geval wordt dus key 31 op waarde 0 gezet.
 		}
 
-		if(seizureLevel == 3 && seizureTime >= 3){ //wanneer er meer dan 3 iteraties een groot verschil is er sprake van een beroerte.
-			s = s + "33;1;"; //seizure alarm wordt geactiveerd.
-			cout << "Seizure Detected";
+		if(oneSecond - time(nullptr) == 0 && seizureLevel < 3) { // Als één seconde verstreken en nog niet hoge seizurelevel...
+			oneSecond = time(nullptr) + 1;
+			seizureTime++;
+			if (lastAct - stoi(this->s1->getValue()) > 200 || lastAct - stoi(this->s1->getValue()) < -200 ) {
+				// is het verschil tussen de laatste en huidige druksensorwaarde groter dan 200? \
+				// Dan gaat seizurelevel eentje omhoog
+				seizureLevel++;
+			}
+			lastAct = stoi(this->s1->getValue());
+
+			if (seizureTime >= 5) { // Na 5 seconde meten, beginnen we opnieuw met meten voor seizures
+				seizureTime = 0;
+			}
 		}
-	}
+
+		if (seizureLevel >= 2 && seizureTime <= 3) { //Als binnen 3 seconde 2 of meer grote wijzigingen in druk meetbaar zijn, alarm!
+			//cout << endl << endl << endl << "TIMMY KRIJGT EEN EPILEPTISCHE AANVAL!" << endl << endl << endl;
+			s = s + "31;1;"; // notificatie seizure alert op de GUI van de bewaker
+			seizureLevel = -1; // opnieuw seizurelevel initialiseren
+		}
 
 	return s; //geef nieuwe actuator waarden door.
 }
