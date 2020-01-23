@@ -22,6 +22,8 @@ private:
     Value sensor; //JSON object, where logic can be applied.
     Value actuator;
     StyledStreamWriter writer; //Writes JSON data to file
+    stringstream stringtime;
+
 public:
     Database();
     ~Database();
@@ -30,6 +32,7 @@ public:
     void refreshActuatorData();
     string readActuatorData(string);
     void writeActuatorData(string, string);
+    void createLog(string);
 };
 
 
