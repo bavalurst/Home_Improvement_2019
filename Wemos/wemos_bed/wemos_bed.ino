@@ -11,7 +11,7 @@ const char* password = "LekkerBelangrijk";
 WiFiServer wifiServer(PORT);
 
 // statische IP
-IPAddress ip(10, 42, 0, 14);
+IPAddress ip(10, 42, 0, 10);
 IPAddress GW(10, 42, 0, 1);
 IPAddress netmask(255, 255, 255, 0);
 
@@ -152,14 +152,13 @@ void initWiFi()
   Serial.print("Connecting to ");
   Serial.println(ssid);
   WiFi.hostname("Wemos");
-  WiFi.begin(ssid, password);
   WiFi.mode(WIFI_STA);
-  WiFi.config(ip, GW, netmask, GW);
- 
+  WiFi.begin(ssid, password);
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
+  WiFi.config(ip, GW, netmask, GW);
   
   Serial.println("");
   Serial.println("WiFi connected");

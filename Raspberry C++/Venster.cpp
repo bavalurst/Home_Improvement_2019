@@ -32,7 +32,7 @@ string Venster::logic(map<string, Device*> dev)
 		cout << "turning window on" << endl;
 	}
 	
-	else if(this->s2->getValue()) > 400 && this->a2->getValue() != 2){
+	else if(stoi(this->s2->getValue()) > 400 && stoi(this->a2->getValue()) != 2){
 		s = s + "15;0;";			//venster open
 	}
 
