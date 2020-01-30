@@ -86,19 +86,17 @@ string Bed::logic(map<string, Device*> dev)
 		goSleep = 0;
 	}
 	if (stoi(this->s2->getValue()) < 200 && goSleep == 0 && alarm == 1) { // Alarm weer uitzetten als Timmothy is opgestaan
-		s = s + "30;0;";
+		s = s + "1;0;30;0;"; // lamp uit, alarm uit
 		alarm = 0;
 	}
 
-	/**
-	if (stoi(this->s2->getValue()) > 200 && acts.at("1")->getValue() != "1") {
-		s = s + "1;1;";
-	}
 
-	if (stoi(this->s2->getValue()) < 200 && acts.at("1")->getValue() != "0") {
+	if(stoi(this->s1->getValue()) == 1 && acts.at("1")->getValue() == "1"){ // Lamp aan bij indrukken knop
 		s = s + "1;0;";
 	}
-	 */
+	else if(stoi(this->s1->getValue()) == 1 && acts.at("1")->getValue() == "0"){ // Lamp weer uit bij indrukken knop
+		s = s + "1;1;";
+	}
 
 	return s; // alle actuatoren key en waardes returnen zodat ze in control kunnen worden verwerkt
 }
