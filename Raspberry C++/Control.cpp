@@ -61,7 +61,7 @@ void Control::compareDatabaseToDevice()
             }
         }
         medicine(); //initialize medicine check
-        usleep(100000); // wait 100ms to prevent socket failure
+        usleep(50000); // wait 100ms to prevent socket failure
 
         string buffer = dev->second->receiveMessage(); //new string is equal to receive message from device in loop
         vector<string> result; //initialize vector

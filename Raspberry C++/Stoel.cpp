@@ -9,7 +9,9 @@ Stoel::Stoel(char* ip) : Device(ip) {
 	a1 = new Actuator("4", "0"); //Actuator voor trilfunctie
 	addActuator("4", a1);
 	a2 = new Actuator("5", "0"); //Actuator voor LED
-	addActuator("5", a1);
+	addActuator("5", a2);
+	a3 = new Actuator("40", "0"); //Actuator voor de website om de trilfunctie aan te zetten. Is nodig voor de check of de stoel aan mag of niet.
+	addActuator("40", a3);
 	s1 = new Sensor("6", "0"); //sensor voor druksensor
 	addSensor(s1);
 	s2 = new Sensor("7", "0"); //sensor voor stoelknop
@@ -32,15 +34,24 @@ string Stoel::logic(map<string, Device*> dev)
 	timeStart = time(nullptr);
 
 	//massage function
-	if((s2->getValue() == "1" || a1->getValue() == "1") && alarm == NULL && cooldown == NULL) { //wanneer de trilfunctie op "2" wordt gezet en het alarm en cooldown niet in gebruik zijn start de massage en wordt de 5 seconden cooldown gestart.
-		s = s + "4;2;33;1;";
+	if((s2->getValue() == "1" || a3->getValue() == "1") && alarm == NULL && cooldown == NULL) { //wanneer de trilfunctie op "2" wordt gezet en het alarm en cooldown niet in gebruik zijn start de massage en wordt de 5 seconden cooldown gestart.
+		s = s + "4;2;33;0;";
 		alarm = timeStart + 5; //tijdsduur van de massage.
 		cout << "Massage initiated \n";
 	}
 
-	if(timeStart > alarm && alarm != NULL){ //Massage functie beindigen na 5 seconden
+	if((s2->getValue() == "1" || a3->getValue() == "1") && cooldown != NULL) {
+
+		s = s + "33;1;40;0"; //als hij aan wilt worden gezet terwijl de cooldown nog actief is
+	}
+
+	/*if((s2->getValue() == "0" || a3->getValue() == "0") && alarm != NULL) {
+		cooldown
+	}*/
+
+	if(((s2->getValue() == "1" || a3->getValue() == "0") && alarm != NULL) || (timeStart > alarm && alarm != NULL)){ //Massage functie beindigen na 5 seconden
 		alarm = NULL;
-		s = s + "4;0;33;0;";
+		s = s + "4;0;";
 		cooldown = timeStart + 5; //tijdsduur van de cooldown bepalen.
 		cout << "Massage ended \n";
 	}

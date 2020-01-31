@@ -75,7 +75,7 @@ string Device::receiveMessage()
 
 	valread = read( sock , buffer, 128);
 
-	usleep(100000);
+	usleep(50000);
 
 	shutdown(sock, SHUT_RDWR);
 

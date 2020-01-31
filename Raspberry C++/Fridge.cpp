@@ -8,6 +8,8 @@ Fridge::Fridge(char* ip) : Device(ip) {
 	addSensor(s1);
 	s2 = new Sensor("21", "0");		// doorsensor	|| 0 - 1
 	addSensor(s2);
+	s3 = new Sensor("20", "0");		// temp outside
+	addSensor(s3);
 
 }
 

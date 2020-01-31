@@ -14,6 +14,7 @@ private:
 	Actuator* a1;
 	Sensor* s1;
 	Sensor* s2;
+	Sensor* s3;
 	time_t timeStart;
 	int fridgeLimit = 10;
 	int deurOpen;
