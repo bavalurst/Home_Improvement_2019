@@ -165,7 +165,7 @@ void connectWithClient()
       Switch.value = buffer1;
       tempFridge.value = buffer2;
       tempHeatsink.value = buffer3;
-      sensorString = Switch.key + EndOfNumber + Switch.value + EndOfNumber + tempFridge.key + EndOfNumber + tempFridge.value + EndOfNumber; // string die teruggestuurd word naar de pi
+      sensorString = Switch.key + EndOfNumber + Switch.value + EndOfNumber + tempFridge.key + EndOfNumber + tempFridge.value + EndOfNumber + tempHeatsink.key + EndOfNumber + tempHeatsink.value + EndOfNumber ; // string die teruggestuurd word naar de pi
 
       char writebuffer[50];
       strcpy(writebuffer, sensorString.c_str()); 
