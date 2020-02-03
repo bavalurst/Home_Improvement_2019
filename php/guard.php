@@ -126,7 +126,7 @@
 			<div class="content">
 			<input type="submit" name = "button14" class="button" value="Toggle Ledstrip <?php //global $arr; echo $arr[14]; ?>"> <!-- Ledstrip, Wall -->
 					<?php
-					if (isset($_POST['button14'])){global $arr; if ($arr[41] == 0){$arr[41] = 1;}else {$arr[41] = 0;}Write("14,$arr[41]");  refresh(0);}
+					if (isset($_POST['button14'])){global $arr; if ($arr[41] == 0){$arr[41] = 1;}else {$arr[41] = 0;}Write("41,$arr[41]");  refresh(0);}
 					?>
 			<input type="submit" name = "button15" class="button" value="Window <?php //global $arr; echo $arr[15]; ?>"> <!-- Window, Wall -->
 					<?php
