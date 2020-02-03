@@ -15,6 +15,7 @@ public:
     Zuil(char*);
     virtual ~Zuil();
     virtual string logic(map<string, Device*>);
+    virtual string getStatus(string);
 };
 
 #endif /* ZUIL_H */
