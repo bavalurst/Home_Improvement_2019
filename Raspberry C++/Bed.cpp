@@ -66,7 +66,7 @@ string Bed::logic(map<string, Device*> dev)
 	//cout << "Seizure time: " << seizureTime << endl;
 
 	if (seizureTime < 10) { // Na 10 seconde meten, beginnen we opnieuw met meten op seizures
-		if (seizureLevel >= 10){
+		if (seizureLevel >= 5){
 			//cout << endl << endl << endl << "TIMMY KRIJGT EEN EPILEPTISCHE AANVAL!" << endl << endl << endl;
 			s = s + "31;1;"; // notificatie seizure alert op de GUI van de bewaker
 			seizureLevel = 0; // seizurelevel resetten
