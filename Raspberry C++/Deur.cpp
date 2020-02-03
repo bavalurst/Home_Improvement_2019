@@ -18,6 +18,8 @@ Deur::Deur(char* ip) : Device(ip) {
 	addActuator("32", a7);
 	a8 = new Actuator("38", "0"); //Incorrect PIN Alert
 	addActuator("38", a8);
+	a9 = new Actuator("39", "0"); //Alert naar bewaker
+	addActuator("39", a9);
 	s1 = new Sensor("25", "0"); //sensor voor Deurknop binnen
 	addSensor(s1);
 	s2 = new Sensor("26", "0"); //sensor voor Deurknop buiten
@@ -44,7 +46,7 @@ string Deur::getStatus(string key) {
 		if(a1->getValue() == "0") return"deurled binnen is uit";
 	}
 	if(key == "23") {
-		if(a2->getValue() == "1") return "deurled buiten is aan";
+		if(a2->getValue() == "2") return "deurled buiten is aan";
 		if(a2->getValue() == "0") return "deurled buiten is uit";
 	}
 
@@ -54,7 +56,7 @@ string Deur::getStatus(string key) {
 	}
 
 	if (key == "25") if(s1->getValue() == "1") return "deurknop binnenkant is ingedrukt";
-	if (key == "26") if(s2->getValue() == "1") return "deurknop buitenkant is ingedrukt";
+	if (key == "26") if(s2->getValue() == "2") return "deurknop buitenkant is ingedrukt";
 
 	return "";
 }
@@ -80,7 +82,7 @@ if(a5->getValue() == "1" && a4->getValue() == PIN) { //wanneer er op de client.p
 else if(a5->getValue() == "1" && a4->getValue() != PIN){
 	incorrectPinCount = stoi(this->a8->getValue()); //huidige foute pogingen.
 	incorrectPinCount++; //foutepogingen verhogen.
-	s = s + "29;1;28;0;27;0;39;1;38;" + to_string(incorrectPinCount) + ";"; //alert aan de bewaker op de client.php tonen.
+	s = s + "29;1;28;0;27;0;38;" + to_string(incorrectPinCount) + ";"; //alert aan de bewaker op de client.php tonen.
 }
 
 if(a3->getValue() == "1" && timeDoorStart == NULL){
@@ -95,10 +97,12 @@ if(timeDoorStart != NULL) { //wanneer 2 seconden zijn verstreken gaat het de deu
 
 }
 
-if(s2->getValue() == "1" && a3->getValue() != "1") { //Wanneer op de Deurknop buiten wordt gedrukt, gaat de deur open.
+//cout << "KIJK HIER DING SNEL NU?????????????????????:" << s2->getValue() << " / " << a3->getValue() << endl;
+
+if(s2->getValue() == "2" && a3->getValue() != "1") { //Wanneer op de Deurknop buiten wordt gedrukt, gaat de deur open.
 	s = s + "39;1;";
 
-	cout << "Alert naar bewaker (Deur openen van buitenaf). \n";
+	//cout << "Alert naar bewaker (Deur openen van buitenaf). !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! \n";
 }
 
 if((s1->getValue() == "1" || s2->getValue() == "2") && a7->getValue() == "1") { //Wanneer Brandalarm afgaat openen beide deurknoppen de deur.
@@ -115,7 +119,7 @@ else if(lichtwaarde >= 400){
 }
 
 if(lichtwaarde < 400 && s2->getValue() == "2"){ //Wanneer het nacht is (lichtintensitiet < 400) gaat snachts de buiten lamp aan voor 6 seconden.
-	s = s + "39;1;23;3;"; //lED aanzetten en bewaker inlichten.
+	s = s + "23;3;"; //lED aanzetten en bewaker inlichten.
 	timeStart = time(nullptr); //timer starten.
 
 }

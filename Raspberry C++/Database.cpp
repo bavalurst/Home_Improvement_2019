@@ -42,11 +42,7 @@ void Database::writeSensorToFile() {
 
 void Database::updateSensorData(string key, string value) { //updates the sensor.json file with give key and value
 
-	//this->refreshSensorData(); 			//refreshes json data into class before updating it
 	sensor[key] = value; 					//updates the value object, which is part of jsoncpp to edit json files, with the corresponding key/value pair. Works like adding a value to a vector.
-	//ofstream Out("/home/pi/sensor.json"); //opens ostream, used to write data to file (outstream)
-	//writer.write(Out, sensor); 			//writes the json data to file
-	//Out.close(); 							//close the ostream.
 
 }
 
@@ -70,11 +66,17 @@ void Database::writeActuatorData(string key, string value)  { //writes data to a
 }
 
 void Database::createLog(string message) {
+
+	//cout << "MESSAGE: ->" << message << "<-MESSAGE" << endl;
+	if((message.find_first_not_of(' ') == std::string::npos) || message == "") return;
+
+	message = message + "\n";
+
 	time_t CurrentTime = time(nullptr);
 	stringstream stringtimecurrent;
 	stringtimecurrent << asctime(localtime(&CurrentTime));
 
-	cout << "Writing: " << message << "To filename: logfile.txt" << endl;
+	//cout << "Writing: " << message << "To filename: logfile.txt" << endl;
 
 	ofstream logFile("logfile.txt", ios::app);
 

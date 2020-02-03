@@ -22,6 +22,8 @@ Stoel::Stoel(char* ip) : Device(ip) {
 Stoel::~Stoel() {
 
 	delete a1;
+	delete a2;
+	delete a3;
 	delete s1;
 	delete s2;
 
@@ -83,7 +85,7 @@ string Stoel::logic(map<string, Device*> dev)
 		cout << "Massage cooldown ended \n";
 	}
 
-	//seisure detection
+	//seizure detection
 	if (seizureLevel == -1){ // initialisatiefase. Zie Bed.h; seizurelevel begint op -1
 		lastAct = stoi(this->s1->getValue()); // De huidige waarde van de druksensor wordt nu opgeslagen in "lastAct" (vage naam)
 		seizureLevel = 0; // seizurelevel wordt op 0 gezet.

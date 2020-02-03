@@ -18,6 +18,7 @@ private:
 	Actuator* a6;
 	Actuator* a7;
 	Actuator* a8;
+	Actuator* a9;
 	Sensor* s1;
 	Sensor* s2;
 

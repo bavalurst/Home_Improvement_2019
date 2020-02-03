@@ -11,6 +11,7 @@ private:
     /* data */
 	Actuator* a1;
 	Actuator* a2;
+	Actuator* a3;
 	Sensor* s1;
 	Sensor* s2;
 public:

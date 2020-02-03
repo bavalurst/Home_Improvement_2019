@@ -6,6 +6,8 @@ Venster::Venster(char* ip) : Device(ip) {
 	addActuator("14", a1);
 	a2 = new Actuator("15", "0");	// window 		waarde 1 of 0
 	addActuator("15", a2);
+	a3 = new Actuator("41", "0");  // aansturing window website
+	addActuator("41", a3);
 	
 	s1 = new Sensor("16", "0");		// dimmer
 	addSensor(s1);
@@ -18,6 +20,7 @@ Venster::~Venster() {
 
 	delete a1;
 	delete a2;
+	delete a3;
 	delete s1;
 	delete s2;
 
@@ -28,7 +31,7 @@ string Venster::getStatus(string key){
 		return "De huidige waarde van de LED-strip is: " + a1->getValue();
 	}
 	if(key == "15"){
-		if(a2->getValue() == "1"){
+		if(a2->getValue() == "3" || a2->getValue() == "1"){
 			return "Het raam is gesloten";
 		}
 	}
@@ -53,9 +56,16 @@ string Venster::logic(map<string, Device*> dev)
 		s = s + "15;0;";			//venster open
 	}
 
-	string LedValue = (this->s1->getValue());
-	s = s + "14;" + LedValue + ";";			// felheid van de LED strip staat gelijk aan de waarde van de dimmer
+	cout << "DE HUIDIGE STATUS VAN AANSTURING WEBSITE: " << this->a3->getValue() << endl;
 
+	if(stoi(this->a3->getValue()) == 1){
+		string LedValue = (this->s1->getValue());
+		s = s + "14;" + LedValue + ";";			// felheid van de LED strip staat gelijk aan de waarde van de dimmer
+	}
+
+	if(stoi(this->a3->getValue()) == 0){
+		s = s + "14;0;";
+	}
 
 	return s;
 }

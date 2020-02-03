@@ -75,7 +75,7 @@ void Control::compareDatabaseToDevice()
         		if(it != sensors.end()) { //for that sensor, set the value of the sensor equal to the value recieved earlier, and store it in the sensor.json file
         			it->second->setValue(result[i + 1]);
         			dat->updateSensorData(result[i], result[i + 1]);
-        			cout << "Updating with key: " << result[i] << " Value: " << result[i+1] << endl; 
+        			//cout << "Updating with key: " << result[i] << " Value: " << result[i+1] << endl;
         		}
             }
 
@@ -87,7 +87,7 @@ void Control::compareDatabaseToDevice()
         		/*cout << "Writing to: " << stringresult[i];
         		cout << " with value: " << stringresult[i+1] << endl;*/
 
-        		dat->createLog(dev->second->getStatus(dev->first) + "\n"); //create log
+        		dat->createLog(dev->second->getStatus(stringresult[i])); //create log
         		dat->writeActuatorData(stringresult[i], stringresult[i+1]); //To change actuator values, they will be written in the database. The next loop will catch it, and send the proper message.
         	}
 

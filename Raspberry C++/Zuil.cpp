@@ -30,7 +30,7 @@ string Zuil::getStatus(string key){
 		}
 	}
 	if(key == "11"){
-		if(a2->getValue() == "1"){
+		if(a2->getValue() == "2"){
 			return "De LED op de zuil staat aan.";
 		}
 	}
@@ -47,17 +47,15 @@ string Zuil::getStatus(string key){
 
 string Zuil::logic(map<string, Device*> dev)
 {
+
 	string a = this->a1->getValue(); // Waarde rookdetector oproepen en in "a" zetten.
 	string s = ""; // bericht dat gereturned wordt en in logic verwerkt wordt.
 
-	map<string, Actuator*> acts = dev.at("Zuil")->getActuators(); // Alle actuatoren van "Zuil" in acts zetten (een map)
-
-	if (stoi(this->s2->getValue()) < 300) { // Bij een waarde van onder de 300 voor de rookmelder...
+	if (stoi(this->s2->getValue()) < 300) { // Bij een waarde van onder de 500 voor de rookmelder...
 			s = s + "10;1;"; // Buzzer aan
 			s = s + "32;1;"; // Melding BRAND! op de GUI.
 			//cout <<endl << endl << endl << "ER IS BRAND!" << endl << endl << endl;
 	}
-
 
 	if (stoi(this->s1->getValue()) == 1) { // Als de noodknop wordt ingedrukt...
 		s = s + "37;1;"; // melding naar de GUI van de bewaker.
