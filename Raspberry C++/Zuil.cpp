@@ -26,21 +26,21 @@ Zuil::~Zuil() {
 string Zuil::getStatus(string key){
 	if(key == '10'){
 		if(a1->getValue() == '1'){
-			return "The buzzer is on.";
+			return "De zoemer staat aan.";
 		}
 	}
 	if(key == '11'){
 		if(a2->getValue() == '1'){
-			return "The led on the column is on.";	
+			return "De LED op de zuil staat aan.";	
 		}
 	}
 	if(key == '12'){
 		if(s1->getValue() == '1'){
-			return "The button on the column had been clicked on.";	
+			return "TDe knop op de zuil is ingedrukt.";	
 		}
 	}
 	if(key == '13'){
-		string a = "The smoke sensor value is: " + s2->getVaue();
+		string a = "De waarde van de rook sensor is: " + s2->getVaue();
 		return a;
 	}
 }
