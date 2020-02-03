@@ -27,6 +27,28 @@ Stoel::~Stoel() {
 
 }
 
+string Stoel::getStatus(string key){
+	if(key == '4'){
+		if(a1->getValue() == '2'){
+			return "De Massage functie van stoel staat aan.";
+		}
+	}
+	if(key == '5'){
+		if(a2->getValue() == '1'){
+			return "De LED op de stoel staat aan.";	
+		}
+	}
+	if(key == '6'){
+		string a = "De huidge waarde van de druksensor op de stoel is: " + s1->getValue();
+		return a;
+	}
+	if(key == '7'){
+		if(s2->getVaue() == '1'){
+			return "De knop op de stoel is ingedrukt";
+		}
+	}
+}
+
 string Stoel::logic(map<string, Device*> dev)
 {
 	string s = "";
