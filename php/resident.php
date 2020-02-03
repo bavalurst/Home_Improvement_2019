@@ -323,7 +323,7 @@
 					<?php //global $arr; if($arr[33] == 1){echo '<div class="alert green">Massage requested during cooldown (!)'; echo '<input type="submit" name = "alert4" class="alertButton" value="Clear"> </div>';} ?>
 					<?php if (isset($_POST['alert4'])){global $arr; write("33,0"); refresh(0);}?>
 					
-					<?php //global $arr; if($arr[30] == 1){echo '<div class="alert green">Alarmclock currently active (!)'; echo '<input type="submit" name = "alert1" class="alertButton" value="Clear"> </div>';} ?>
+					<?php global $arr; if($arr[30] == 1){echo '<div class="alert green">Alarmclock currently active (!)'; echo '<input type="submit" name = "alert1" class="alertButton" value="Clear"> </div>';} ?>
 					<?php if (isset($_POST['alert1'])){global $arr; write("30,0"); refresh(0);}?>
 				</div>
 			</div>	
