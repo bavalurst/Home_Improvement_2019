@@ -19,7 +19,7 @@ Schemerlamp::~Schemerlamp() {
 
 }
 
-string Zuil::getStatus(string key){
+string Schemerlamp::getStatus(string key){
 	if(key == '8'){
 		if(a1->getValue() == '1'){
 			return "De schemerlamp staat aan.";
