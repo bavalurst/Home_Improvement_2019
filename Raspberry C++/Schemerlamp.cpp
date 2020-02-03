@@ -19,6 +19,20 @@ Schemerlamp::~Schemerlamp() {
 
 }
 
+string Zuil::getStatus(string key){
+	if(key == '8'){
+		if(a1->getValue() == '1'){
+			return "De schemerlamp staat aan.";
+		}
+	}
+	if(key == '9'){
+		if(s1->getValue() == '1'){
+			return "De schemerlamp detecteert beweging.";	
+		}
+	}
+}
+
+
 string Schemerlamp::logic(map<string, Device*> dev) 		//This function is called in each program loop, and accepts a map of devices it can access to get information.
 {
     CurrentTime = time(nullptr); 				//resets the CurrentTime value to the current time.
