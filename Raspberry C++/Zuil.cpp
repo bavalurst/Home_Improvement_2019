@@ -36,7 +36,7 @@ string Zuil::getStatus(string key){
 	}
 	if(key == '12'){
 		if(s1->getValue() == '1'){
-			return "The button on the column had been clicked pressed.";	
+			return "The button on the column had been clicked on.";	
 		}
 	}
 	if(key == '13'){
