@@ -20,6 +20,7 @@ public:
     Schemerlamp(char*);
     virtual ~Schemerlamp();
     virtual string logic(map<string, Device*>);
+    virtual string getStatus(string);
 };
 
 #endif /* SCHEMERLAMP_H */
