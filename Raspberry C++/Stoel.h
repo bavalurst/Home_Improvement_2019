@@ -33,6 +33,7 @@ public:
     Stoel(char*);
     virtual ~Stoel();
     virtual string logic(map<string, Device*>);
+    virtual string getStatus(string);
 };
 
 #endif /* STOEL_H */
