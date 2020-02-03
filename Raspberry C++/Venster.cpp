@@ -23,11 +23,7 @@ Venster::~Venster() {
 
 }
 
-string Venster::logic(map<string, Device*> dev)
-{
-	string s = "";
-	
-string Zuil::getStatus(string key){
+string Venster::getStatus(string key){
 	if(key == '14'){
 		string a = "De huidige waarde van de LED-strip is: " + a1->getValue();
 		return a;
@@ -46,7 +42,10 @@ string Zuil::getStatus(string key){
 		return a;
 	}
 }
-	
+
+string Venster::logic(map<string, Device*> dev)
+{
+	string s = "";	
 	if(stoi(this->s2->getValue()) <= 400){		// als het donker is
 		s = s + "15;1;22;1;";			// sluit het venster en zet de binnenlamp v/d deur aan
 		cout << "turning window on" << endl;
