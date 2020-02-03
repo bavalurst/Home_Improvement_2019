@@ -126,11 +126,11 @@
 			<div class="content">
 			<input type="submit" name = "button14" class="button" value="Toggle Ledstrip <?php //global $arr; echo $arr[14]; ?>"> <!-- Ledstrip, Wall -->
 					<?php
-					if (isset($_POST['button14'])){global $arr; if ($arr[14] == 0){$arr[14] = 1;}else {$arr[14] = 0;}Write("14,$arr[14]");  refresh(0);}
+					if (isset($_POST['button14'])){global $arr; if ($arr[41] == 0){$arr[41] = 1;}else {$arr[41] = 0;}Write("14,$arr[41]");  refresh(0);}
 					?>
 			<input type="submit" name = "button15" class="button" value="Window <?php //global $arr; echo $arr[15]; ?>"> <!-- Window, Wall -->
 					<?php
-					if (isset($_POST['button15'])){global $arr; if ($arr[15] == 0){$arr[15] = 1;}else {$arr[15] = 0;}Write("15,$arr[15]");  refresh(0);}
+					if (isset($_POST['button15'])){global $arr; if ($arr[15] == 0){$arr[15] = 3;}else {$arr[15] = 0;}Write("15,$arr[15]");  refresh(0);}
 					?>
 				<div class="led-group">
 					<div class="led <?php global $arr; if($arr[16] >= 1){echo "green";}else{echo "grey";}?>" value="Dimmer"><p><?php global $arr; if($arr[16] >= 1){echo "ON";}else{echo "OFF";}?></p></div> <!-- Dimmer, Wall -->
