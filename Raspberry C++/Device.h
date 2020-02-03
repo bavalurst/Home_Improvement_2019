@@ -42,6 +42,7 @@ public:
     virtual void addActuator(string, Actuator*);
     virtual void addSensor(Sensor*);
     virtual string logic(map<string, Device*>) = 0;
+    virtual string getStatus(string) = 0;
 };
 
 #endif /* Device_H */

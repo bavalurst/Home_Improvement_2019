@@ -20,14 +20,14 @@ Schemerlamp::~Schemerlamp() {
 }
 
 string Schemerlamp::getStatus(string key){
-	if(key == '8'){
-		if(a1->getValue() == '1'){
+	if(key == "8"){
+		if(a1->getValue() == "1"){
 			return "De schemerlamp staat aan.";
 		}
 	}
-	if(key == '9'){
-		if(s1->getValue() == '1'){
-			return "De schemerlamp detecteert beweging.";	
+	if(key == "9"){
+		if(s1->getValue() == "1"){
+			return "De schemerlamp detecteert beweging.";
 		}
 	}
 }

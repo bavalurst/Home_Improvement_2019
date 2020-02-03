@@ -24,25 +24,25 @@ Zuil::~Zuil() {
 }
 
 string Zuil::getStatus(string key){
-	if(key == '10'){
-		if(a1->getValue() == '1'){
+	if(key == "10"){
+		if(a1->getValue() == "1"){
 			return "De zoemer staat aan.";
 		}
 	}
-	if(key == '11'){
-		if(a2->getValue() == '1'){
-			return "De LED op de zuil staat aan.";	
+	if(key == "11"){
+		if(a2->getValue() == "1"){
+			return "De LED op de zuil staat aan.";
 		}
 	}
-	if(key == '12'){
-		if(s1->getValue() == '1'){
-			return "De knop op de zuil is ingedrukt.";	
+	if(key == "12"){
+		if(s1->getValue() == "1"){
+			return "De knop op de zuil is ingedrukt.";
 		}
 	}
-	if(key == '13'){
-		string a = "De waarde van de rook sensor is: " + s2->getVaue();
-		return a;
+	if(key == "13"){
+		return "De waarde van de rook sensor is: " + s2->getValue();
 	}
+	return "";
 }
 
 string Zuil::logic(map<string, Device*> dev)

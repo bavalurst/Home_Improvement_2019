@@ -25,6 +25,7 @@ public:
     Bed(char*);
     virtual ~Bed();
     virtual string logic(map<string, Device*>);
+    virtual string getStatus(string);
 };
 
 #endif /* BED_H */

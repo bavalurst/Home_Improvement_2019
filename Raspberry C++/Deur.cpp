@@ -36,6 +36,29 @@ Deur::~Deur() {
 
 }
 
+string Deur::getStatus(string key) {
+
+
+	if(key == "22") {
+		if(a1->getValue() == "1") return "deurled binnen is aan";
+		if(a1->getValue() == "0") return"deurled binnen is uit";
+	}
+	if(key == "23") {
+		if(a2->getValue() == "1") return "deurled buiten is aan";
+		if(a2->getValue() == "0") return "deurled buiten is uit";
+	}
+
+	if(key == "24") {
+		if(a3->getValue() == "0") return "deur is dicht";
+		if(a4->getValue() == "1") return "deur is open";
+	}
+
+	if (key == "25") if(s1->getValue() == "1") return "deurknop binnenkant is ingedrukt";
+	if (key == "26") if(s2->getValue() == "1") return "deurknop buitenkant is ingedrukt";
+
+	return "";
+}
+
 string Deur::logic(map<string, Device*> dev)
 {
 s = "";

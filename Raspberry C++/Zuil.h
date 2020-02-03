@@ -8,6 +8,7 @@ class Zuil : public Device
 private:
     /* Alle actuatoren en sensoren */
 	Actuator* a1;
+	Actuator* a2;
 	Sensor* s1;
 	Sensor* s2;
 

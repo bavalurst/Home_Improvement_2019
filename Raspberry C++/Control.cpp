@@ -41,7 +41,8 @@ void Control::addDevice(string key, Device* d1)
 void Control::compareDatabaseToDevice()
 {   
     // compare the values from the map with databases and the map from devices with each other, and act accordingly
-    for (map<string, Device*>::iterator dev = devices.begin(); dev != devices.end(); ++dev)
+    dat->writeSensorToFile(); //write new sensor data to the json file, used by this program for logic.
+	for (map<string, Device*>::iterator dev = devices.begin(); dev != devices.end(); ++dev)
     {
         map<string, Actuator*> a1 = dev->second->getActuators(); //gets a map of actuators from device located at iterator from device map
         map<string, Sensor*> sensors;                            //initialize sensormap and iterator
@@ -85,7 +86,8 @@ void Control::compareDatabaseToDevice()
         	for(int i=0; i < stringresult.size(); i+=2) {
         		/*cout << "Writing to: " << stringresult[i];
         		cout << " with value: " << stringresult[i+1] << endl;*/
-			dat->createLog("Writing to: " + stringresult[i] + " with value: " + stringresult[i + 1] + "\n"); //create log
+
+        		dat->createLog(dev->second->getStatus(dev->first) + "\n"); //create log
         		dat->writeActuatorData(stringresult[i], stringresult[i+1]); //To change actuator values, they will be written in the database. The next loop will catch it, and send the proper message.
         	}
 

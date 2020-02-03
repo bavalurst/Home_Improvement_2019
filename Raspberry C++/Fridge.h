@@ -22,6 +22,7 @@ public:
     Fridge(char*);
     virtual ~Fridge();
     virtual string logic(map<string, Device*>);
+    virtual string getStatus(string);
 };
 
 #endif /* FRIDGE_H */

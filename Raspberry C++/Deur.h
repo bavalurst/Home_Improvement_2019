@@ -31,6 +31,7 @@ public:
     Deur(char*);
     virtual ~Deur();
     virtual string logic(map<string, Device*>);
+    virtual string getStatus(string);
 };
 
 #endif /* DEUR_H */

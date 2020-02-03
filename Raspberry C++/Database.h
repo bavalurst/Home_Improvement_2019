@@ -33,6 +33,7 @@ public:
     string readActuatorData(string);
     void writeActuatorData(string, string);
     void createLog(string);
+    void writeSensorToFile();
 };
 
 

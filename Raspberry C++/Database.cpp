@@ -13,16 +13,6 @@ Database::Database() {
 
 Database::~Database() {}
 
-void Database::updateSensorData(string key, string value) { //updates the sensor.json file with give key and value
-	
-	this->refreshSensorData(); 		//refreshes json data into class before updating it
-	sensor[key] = value; 			//updates the value object, which is part of jsoncpp to edit json files, with the corresponding key/value pair. Works like adding a value to a vector.
-	ofstream Out("/home/pi/sensor.json"); //opens ostream, used to write data to file (outstream)
-	writer.write(Out, sensor); 		//writes the json data to file
-	Out.close(); 				//close the ostream.
-
-}
-
 void Database::refreshActuatorData() { //refreshes 
 
 	buffer.clear(); 			//clears the buffer before reading, just in case
@@ -41,6 +31,23 @@ void Database::refreshSensorData() {		//idem, for sensor
 	reader.parse(buffer, sensor);
 	buffer.clear();
 	In.close();
+}
+
+void Database::writeSensorToFile() {
+	ofstream Out("/home/pi/sensor.json");
+	writer.write(Out, sensor); 		//writes the json data to file
+	Out.close();
+	this->refreshSensorData(); //after that, load the file into the system, having actual values for the next routine
+}
+
+void Database::updateSensorData(string key, string value) { //updates the sensor.json file with give key and value
+
+	//this->refreshSensorData(); 			//refreshes json data into class before updating it
+	sensor[key] = value; 					//updates the value object, which is part of jsoncpp to edit json files, with the corresponding key/value pair. Works like adding a value to a vector.
+	//ofstream Out("/home/pi/sensor.json"); //opens ostream, used to write data to file (outstream)
+	//writer.write(Out, sensor); 			//writes the json data to file
+	//Out.close(); 							//close the ostream.
+
 }
 
 string Database::readActuatorData(string key) { //reads Actuatordata found in given key, and returns it as string

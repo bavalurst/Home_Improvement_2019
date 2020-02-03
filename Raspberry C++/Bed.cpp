@@ -22,6 +22,20 @@ Bed::~Bed() {
 	delete s2;
 }
 
+string Bed::getStatus(string key) {
+
+	if(key == "1") {
+		if (a1->getValue() == "1") return "Bedlamp is aan";
+		if (a1->getValue() == "0") return "Bedlamp is uit";
+	}
+
+	if(key == "2") if(s1->getValue() == "1") return "Bedknop is ingedrukt";
+	if(key == "3") if(s2->getValue() != "0") return "Meneer zit op stoel met drukwaarde: " + s2->getValue();
+
+	return "";
+
+}
+
 string Bed::logic(map<string, Device*> dev)
 {
 	string a = this->a1->getValue(); // Waarde actuator1 in "a" opslaan

@@ -21,6 +21,19 @@ Fridge::~Fridge() {
 
 }
 
+string Fridge::getStatus(string key) {
+
+	if(key == "18") if(a1->getValue() == "1") return "koeling is aan";
+	if(key == "19") return "Temperatuur koelkast: " + s1->getValue();
+	if(key == "21") {
+		if(s2->getValue() == "0") return "koelkast is dicht";
+		if(s2->getValue() == "1") return "koelkast is open";
+	}
+	if(key == "20") return "Buitentemperatuur (gemeten door koelkast): " + s3->getValue();
+
+	return "";
+}
+
 string Fridge::logic(map<string, Device*> dev)
 {
 	string s = "";
