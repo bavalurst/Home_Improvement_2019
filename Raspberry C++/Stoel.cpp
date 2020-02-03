@@ -123,3 +123,4 @@ string Stoel::logic(map<string, Device*> dev)
 
 	return s; //geef nieuwe actuator waarden door.
 }
+
