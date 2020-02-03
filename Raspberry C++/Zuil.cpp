@@ -36,7 +36,7 @@ string Zuil::getStatus(string key){
 	}
 	if(key == '12'){
 		if(s1->getValue() == '1'){
-			return "TDe knop op de zuil is ingedrukt.";	
+			return "De knop op de zuil is ingedrukt.";	
 		}
 	}
 	if(key == '13'){
