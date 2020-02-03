@@ -85,34 +85,41 @@ string Stoel::logic(map<string, Device*> dev)
 
 	//seisure detection
 	if (seizureLevel == -1){ // initialisatiefase. Zie Bed.h; seizurelevel begint op -1
-			lastAct = stoi(this->s1->getValue()); // De huidige waarde van de druksensor wordt nu opgeslagen in "lastAct" (vage naam)
-			seizureLevel = 0; // seizurelevel wordt op 0 gezet.
-			s = s + "31;0;"; // Hierin wordt aan het bericht s de waardes 31;0; toegevoerd.
-			// Het bericht s wordt in de functie gereturned en in control worden de juisteren actuatoren aangestuurd.
-			// In dit geval wordt dus key 31 op waarde 0 gezet.
-		}
+		lastAct = stoi(this->s1->getValue()); // De huidige waarde van de druksensor wordt nu opgeslagen in "lastAct" (vage naam)
+		seizureLevel = 0; // seizurelevel wordt op 0 gezet.
+		s = s + "31;0;"; // Hierin wordt aan het bericht s de waardes 31;0; toegevoerd.
+		// Het bericht s wordt in de functie gereturned en in control worden de juisteren actuatoren aangestuurd.
+		// In dit geval wordt dus key 31 op waarde 0 gezet.
+	}
 
-		if(oneSecond - time(nullptr) == 0 && seizureLevel < 3) { // Als één seconde verstreken en nog niet hoge seizurelevel...
-			oneSecond = time(nullptr) + 1;
-			seizureTime++;
-			if (lastAct - stoi(this->s1->getValue()) > 200 || lastAct - stoi(this->s1->getValue()) < -200 ) {
-				// is het verschil tussen de laatste en huidige druksensorwaarde groter dan 200? \
-				// Dan gaat seizurelevel eentje omhoog
-				seizureLevel++;
-			}
-			lastAct = stoi(this->s1->getValue());
+	if (lastAct - stoi(this->s1->getValue()) > 50 || lastAct - stoi(this->s1->getValue()) < -50 ) {
+		// is het verschil tussen de laatste en huidige druksensorwaarde groter dan 50?
+		// Dan gaat seizurelevel eentje omhoog
+		lastAct = stoi(this->s1->getValue());
+		seizureLevel++;
+	}
 
-			if (seizureTime >= 5) { // Na 5 seconde meten, beginnen we opnieuw met meten voor seizures
-				seizureTime = 0;
-			}
-		}
+	if(oneSecond - time(nullptr) == 0) { // Als één seconde verstreken en nog niet hoge seizurelevel...
+		oneSecond = time(nullptr) + 1;
+		seizureTime++;
+	}
 
-		if (seizureLevel >= 2 && seizureTime <= 3) { //Als binnen 3 seconde 2 of meer grote wijzigingen in druk meetbaar zijn, alarm!
+	if (seizureTime < 10) { // Na 10 seconde meten, beginnen we opnieuw met meten op seizures
+		if (seizureLevel >= 5){
 			//cout << endl << endl << endl << "TIMMY KRIJGT EEN EPILEPTISCHE AANVAL!" << endl << endl << endl;
 			s = s + "31;1;"; // notificatie seizure alert op de GUI van de bewaker
-			seizureLevel = -1; // opnieuw seizurelevel initialiseren
+			seizureLevel = 0; // seizurelevel resetten
+			seizureTime = 0; // seizuretime resetten
 		}
+		if (seizureLevel == 0)
+			oneSecond = time(nullptr) - 1;
+		if (seizureLevel == 1) // Pas beginnen met seizureTime tellen zodra er 1 seizureLevel is.
+			oneSecond = time(nullptr) + 1;
+	}
+	else if (seizureTime > 10) { // alles resetten na 10 seconde.
+		seizureTime = 0;
+		seizureLevel = 0;
+	}
 
 	return s; //geef nieuwe actuator waarden door.
 }
-
