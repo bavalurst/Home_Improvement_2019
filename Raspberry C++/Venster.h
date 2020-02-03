@@ -17,6 +17,7 @@ public:
     Venster(char*);
     virtual ~Venster();
     virtual string logic(map<string, Device*>);
+    virtual string getStatus(string);
 };
 
 #endif /* STOEL_H */
