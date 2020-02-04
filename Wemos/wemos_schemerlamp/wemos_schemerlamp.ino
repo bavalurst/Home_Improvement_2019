@@ -61,7 +61,7 @@ void setup() {
   initWiFi();
 
   // ken key values toe aan actuatoren en sensoren
-  Led.key = 5;
+  Led.key = 8;
   Motion.key = 9;
 
   Led.value = 0;
@@ -119,8 +119,8 @@ void connectWithClient()
       while (client.available()>0) {
         c = client.read();
         Led.value = 0;
-        // deze if statement scheid de key van de value
-        if(c - '0' == 5)
+        // deze if statement schijt de key van de value
+        if(c - '0' == 8)
         {
           c = client.read();
           Led.value = c - '0';
