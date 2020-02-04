@@ -24,7 +24,6 @@ class Device
 private:
     char* ip_addr;
     int sock = 0;
-    int PORT = 0;
     int valread = 0;
     int num = 0;
     const char *data;;
