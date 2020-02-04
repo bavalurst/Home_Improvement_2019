@@ -24,6 +24,7 @@ class Device
 private:
     char* ip_addr;
     int sock = 0;
+    int PORT = 0;
     int valread = 0;
     int num = 0;
     const char *data;;
@@ -32,7 +33,7 @@ private:
     map<string, Sensor*> sensorId;
 //    Actuator *a1;
 public:
-    Device(char*);
+    Device(char*, int);
     virtual ~Device();
     virtual char* getIP();
     virtual int sendMessage(string);
