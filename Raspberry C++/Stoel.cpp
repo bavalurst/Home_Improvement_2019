@@ -61,7 +61,7 @@ string Stoel::logic(map<string, Device*> dev)
 	if((s2->getValue() == "1" || a3->getValue() == "1") && alarm == NULL && cooldown == NULL) { //wanneer de trilfunctie op "2" wordt gezet en het alarm en cooldown niet in gebruik zijn start de massage en wordt de 5 seconden cooldown gestart.
 		s = s + "4;2;33;0;";
 		alarm = timeStart + 5; //tijdsduur van de massage.
-		cout << "Massage initiated \n";
+		//cout << "Massage initiated \n";
 	}
 
 	if((s2->getValue() == "1" || a3->getValue() == "1") && cooldown != NULL) {
@@ -77,12 +77,12 @@ string Stoel::logic(map<string, Device*> dev)
 		alarm = NULL;
 		s = s + "4;0;";
 		cooldown = timeStart + 5; //tijdsduur van de cooldown bepalen.
-		cout << "Massage ended \n";
+		//cout << "Massage ended \n";
 	}
 
 	if(timeStart > cooldown && cooldown !=NULL){ //5 seconden cooldown voor massage functie
 		cooldown = NULL; //cooldown is voorbij.
-		cout << "Massage cooldown ended \n";
+		//cout << "Massage cooldown ended \n";
 	}
 
 	//seizure detection

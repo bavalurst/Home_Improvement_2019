@@ -51,7 +51,7 @@ string Zuil::logic(map<string, Device*> dev)
 	string a = this->a1->getValue(); // Waarde rookdetector oproepen en in "a" zetten.
 	string s = ""; // bericht dat gereturned wordt en in logic verwerkt wordt.
 
-	if (stoi(this->s2->getValue()) < 300) { // Bij een waarde van onder de 500 voor de rookmelder...
+	if (stoi(this->s2->getValue()) < 150) { // Bij een waarde van onder de 500 voor de rookmelder...
 			s = s + "10;1;"; // Buzzer aan
 			s = s + "32;1;"; // Melding BRAND! op de GUI.
 			//cout <<endl << endl << endl << "ER IS BRAND!" << endl << endl << endl;

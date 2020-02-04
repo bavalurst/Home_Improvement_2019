@@ -49,7 +49,7 @@ string Venster::logic(map<string, Device*> dev)
 	string s = "";
 	if(stoi(this->s2->getValue()) <= 400){		// als het donker is
 		s = s + "15;1;22;1;";			// sluit het venster en zet de binnenlamp v/d deur aan
-		cout << "turning window on" << endl;
+		//cout << "turning window on" << endl;
 	}
 	
 	else if(stoi(this->s2->getValue()) > 400 && stoi(this->a2->getValue()) != 3){

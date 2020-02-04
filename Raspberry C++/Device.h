@@ -32,7 +32,7 @@ private:
     map<string, Sensor*> sensorId;
 //    Actuator *a1;
 public:
-    Device(char*, int);
+    Device(char*);
     virtual ~Device();
     virtual char* getIP();
     virtual int sendMessage(string);

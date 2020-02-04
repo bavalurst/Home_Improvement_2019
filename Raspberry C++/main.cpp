@@ -11,8 +11,6 @@ int main()
 
     while(1)
     {
-
     	c1.compareDatabaseToDevice();		// compare data from Database to Devices (from website to database)
-
     }
 }

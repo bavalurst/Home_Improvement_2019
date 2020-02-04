@@ -18,6 +18,7 @@ int Device::sendMessage(string str)
 	if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 	{
 		printf("\n Socket creation error \n");
+		sock = 0;
 		return -1;
 	}
 
@@ -39,7 +40,7 @@ int Device::sendMessage(string str)
 
 	send(sock , data, strlen(data) , 0 );
 
-	usleep(100000);
+	usleep(50000);
 
 	shutdown(sock, SHUT_RDWR);
 }

@@ -42,7 +42,7 @@ string Fridge::logic(map<string, Device*> dev)
 		s = s + "18;1;";							// koeling+ventilator aan
 		cout << "fridge on" << endl;
 		deurOpen = 0;								
-		cout << deurOpen << endl;
+		//cout << deurOpen << endl;
 	}
 
 	if(stoi(this->s2->getValue()) ==  0 && deurOpen == 0){				// als de deur open gaat
@@ -53,7 +53,7 @@ string Fridge::logic(map<string, Device*> dev)
 
 	if(time(nullptr) >= (timeStart + 10) && deurOpen == 1){				// als de deur open is voor 10s
 		s = s + "18;0;34;1;";							// zet de ventilator en koeling uit, stuur een melding naar de bewaker
-		cout << "fridge off" << endl;
+		//cout << "fridge off" << endl;
 	}
 
 	return s;
