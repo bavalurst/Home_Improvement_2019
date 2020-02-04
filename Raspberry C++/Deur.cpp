@@ -1,6 +1,6 @@
 #include "Deur.h"
 
-Deur::Deur(char* ip int port) : Device(ip, port) {
+Deur::Deur(char* ip) : Device(ip) {
 
 	a1 = new Actuator("22", "0"); //Actuator voor DeurLed binnen
 	addActuator("22", a1);
