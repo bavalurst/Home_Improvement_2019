@@ -94,7 +94,6 @@
 }
   
 .led {
-  background-color: #4CAF50;
   border: none;
   color: white;
   text-align: center;
@@ -105,7 +104,28 @@
   border-radius: 50px; 
   float: right;
   }
-  
+ 
+.led.green{
+background-color: #4CAF50;
+}
+
+.led.red{
+background-color: #FF5733
+}
+
+.led.orange{
+background-color: Orange;
+}
+
+.led.blue{
+background-color: #1E90FF;
+}
+
+.led.grey{
+background-color: grey;
+}
+
+	
 .led p {
   line-height: 17.5px;
 }
@@ -153,6 +173,12 @@
   }
 
 #door{
+width: calc(100% - 10px);
+height: calc(100% - 10px);
+	
+}
+
+#alerts{
 width: calc(100% - 10px);
 height: calc(100% - 10px);
 	
@@ -253,7 +279,7 @@ background-color: #FF5733;
   line-height: 20px;
   margin: -10px 0 12px 0;
   }
-  
+
 .alertButton{
   line-height: 19.5px;
   background-color: grey;
@@ -279,5 +305,10 @@ background-color: #FF5733;
    background-color: #4CAF50;
    border: #4CAF50 1.5px solid;
 }
-  
+
+.alert.blue{
+   background-color: #1E90FF;
+   border: #1E90FF 1.5px solid;
+}
+		
 	
