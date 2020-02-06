@@ -16,27 +16,59 @@
 	
 	$host = "127.0.0.1";
     $port = "20205";
-	$sock = socket_create(AF_INET, SOCK_STREAM, 0); //socket openen.
-	socket_connect($sock, $host, $port);
+	//$sock = socket_create(AF_INET, SOCK_STREAM, 0); //socket openen.
+	//socket_connect($sock, $host, $port);
 
-	socket_write($sock, "update", strlen("update")); //"Update" over de socket verbinding sturen.
+	//socket_write($sock, "update", strlen("update")); //"Update" over de socket verbinding sturen.
 		
-	$reply = socket_read($sock, 1924); //Wachten terugkoppeling van Server.php.
+	//$reply = socket_read($sock, 1924); //Wachten terugkoppeling van Server.php.
 	
-	$arr = explode(" ",$reply); //de teruggekoppelde string converteren naar een Array (met explode();).
+	//$arr = explode(" ",$reply); //de teruggekoppelde string converteren naar een Array (met explode();).
 	
-	socket_close($sock); //socket verbinding beindigen.
+	//socket_close($sock); //socket verbinding beindigen.
+	
+	//echo "Update requested\n";
+	
+	$jsonString1 = file_get_contents('/home/pi/actuator.json');  // actuatoren ophalen.
+	$jsonString2 = file_get_contents('/home/pi/sensor.json'); //sensoren ophalen.
+	$data1 = json_decode($jsonString1, true); //actuator json data omzetten naar array.
+	$data2 = json_decode($jsonString2, true); //sensor json data omzetten naar array.
+	
+	foreach($data1 as $key => $value) { //waarden van de ene array bij de andere voegen
+		//echo "key: $key \n";
+		//echo "value: $value \n";
+		$data2[$key] = $value;
+	}
+
+	ksort($data2); //array op volgorde van ID (Key) sorteren.
+	//print_r($data2);
+	$arr = $data2;
 	
     function Write($msg){ //Write functie. Met deze functie wordt Data via de socket naar de server.php verzonden om zo in een json file te kunnen worden geschreven.
-        $host = "127.0.0.1";
-        $port = "20205";
-		$sock = socket_create(AF_INET, SOCK_STREAM, 0); //socket openen.
-		socket_connect($sock, $host, $port);
+        //$host = "127.0.0.1";
+        //$port = "20205";
+		//$sock = socket_create(AF_INET, SOCK_STREAM, 0); //socket openen.
+		//socket_connect($sock, $host, $port);
 
-		socket_write($sock, $msg, strlen($msg)); //het versturen van de data in de vorm van ID,Value.
+		//socket_write($sock, $msg, strlen($msg)); //het versturen van de data in de vorm van ID,Value.
+		//socket_close($sock); //socket verbinding beindigen.		
+		
+		$jsonString = file_get_contents('/home/pi/actuator.json');  // actuatoren openen
+		$data = json_decode($jsonString, true);
+		$msg2 = explode(',', $msg);                       // bericht ui client splitten op kommas, 		bijvoorbeeld "15,1".
 
-		socket_close($sock); //socket verbinding beindigen.		
+		$ID = $msg2[0];                                   // eerste deel is ID, 						bijvoorbeeld "15".
+		$Value = $msg2[1];                                // tweede deel is de aan te passen waarde, 	bijvoorbeeld "1".
+		
+		//print_r($data);
+		$data[$ID] = $Value;
+		
 
+		$newJsonString = json_encode($data);
+		file_put_contents('/home/pi/actuator.json', $newJsonString); //uitgesplitste waarden naar actuator.json schrijven om geinterpreteerd te kunnen worden door De raspberry Pi.
+
+		$msg = trim($msg);
+		echo "Client Wrote:\t".$msg."\n\n";
     }
     
 	function refresh($cooldown){ //refresh functie. Wordt aangeroepen na het versturen van data om zo nieuwe data op te halen.
@@ -92,7 +124,7 @@
 					<div class="Led-desc"> Pressuresensor </div>
 				</div>	
 				<div class="led-group">
-					<div class="led <?php global $arr; if($arr[7] == 1){echo "green";}else{echo "grey";}?>" value="Switch (Chair)"><p><?php global $arr; if($arr[7] == 1){echo "ON";}else{echo "OFF";}?></p></div> <!-- Switch, Chair -->
+					<div class="led <?php global $arr; if($arr[5] == 1){echo "green";}else{echo "grey";}?>" value="Switch (Chair)"><p><?php global $arr; if($arr[5] == 1){echo "ON";}else{echo "OFF";}?></p></div> <!-- Switch, Chair -->
 					<div class="Led-desc"> Chairlight </div>
 				</div>	
 			</div>
@@ -109,7 +141,7 @@
 			
 			<input type="submit" name = "button40" class="button" value="Toggle Lights <?php //global $arr; echo $arr[15]; ?>"> <!-- Window, Wall -->
 					<?php
-					if (isset($_POST['button40'])){global $arr; if ($arr[15] == 0){$arr[15] = 1;}else {$arr[15] = 0;}Write("15,$arr[15]");  refresh(0);}
+					if (isset($_POST['button40'])){global $arr; if ($arr[5] == 0){$arr[5] = 1;}else {$arr[5] = 0;} Write("5,$arr[5]"); refresh(0);}
 					?>	
 					
 				<div class="led-group">
@@ -175,7 +207,7 @@
 					?>
 			<input type="submit" name = "button11" class="button" value="Led (Column) <?php //global $arr; echo $arr[11]; ?>"> <!-- Led, Column -->
 					<?php
-					if (isset($_POST['button11'])){global $arr; if ($arr[11] == 0){$arr[11] = 1;}else {$arr[11] = 0;}Write("11,$arr[11]");  refresh(0);}
+					if (isset($_POST['button11'])){global $arr; if ($arr[11] == 0){$arr[11] = 2;}else {$arr[11] = 0;}Write("11,$arr[11]");  refresh(0);}
 					?>
 				<div class="led-group">
 					<div class="led <?php global $arr; if($arr[12] == 1){echo "green";}else{echo "grey";}?>" value="Switch (Column)"><p><?php global $arr; if($arr[12] == 1){echo "ON";}else{echo "OFF";}?></p></div> <!-- Switch, Column -->
@@ -205,18 +237,18 @@
 					if (isset($_POST['button24'])){global $arr; if ($arr[24] == 0){$arr[24] = 1;}else {$arr[24] = 0;}Write("24,$arr[24]");  refresh(0);}
 					?>
 						<div class="led-group">
-							<div class="led <?php global $arr; if($arr[25] == 1){echo "green";}else{echo "grey";}?>" value="Inner Doorknob"><p><?php global $arr; if($arr[25] == 1){echo "ON";}else{echo "OFF";}?></p></div> <!-- Inner Doorknob, Door -->
+							<div class="led <?php global $arr; if($arr[22] == 1){echo "green";}else{echo "grey";}?>" value="Inner Doorknob"><p><?php global $arr; if($arr[22] == 1){echo "ON";}else{echo "OFF";}?></p></div> <!-- Inner Doorknob, Door -->
 							<div class="Led-desc">Light (inside)</div>
 						</div>
 						<div class="led-group">
-							<div class="led <?php global $arr; if($arr[26] == 1){echo "green";}else{echo "grey";}?>" value="Outer Doorknob"><p><?php global $arr; if($arr[26] == 1){echo "ON";}else{echo "OFF";}?></p></div> <!-- Outer Doorknob, Door -->
+							<div class="led <?php global $arr; if($arr[23] == 3){echo "green";}else{echo "grey";}?>" value="Outer Doorknob"><p><?php global $arr; if($arr[23] == 3){echo "ON";}else{echo "OFF";}?></p></div> <!-- Outer Doorknob, Door -->
 							<div class="Led-desc">Light (outside)</div>
 						</div>
 					</div>
 			</div>
 	</div>
 	<div class="container-20">
-		<div class="device" id="alerts">
+		<div class="device" id="door">
 				<h1>Alerts</h1> <!-- alerts van de verschillende devices.-->
 				<div class="content">
 					<?php global $arr; if($arr[31] == 1){echo '<div class="alert red">A seizure has been detected (!)'; echo '<input type="submit" name = "alert2" class="alertButton" value="Clear"> </div>';} ?>
