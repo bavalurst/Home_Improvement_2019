@@ -42,6 +42,8 @@ int Device::sendMessage(string str)
 
 	usleep(50000);
 
+	close(sock);
+
 	shutdown(sock, SHUT_RDWR);
 }
 
@@ -55,6 +57,7 @@ string Device::receiveMessage()
 	if ((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0)
 	{
 		printf("\n Socket creation error \n");
+		usleep(1000000);
 		//return -1;
 	}
 
@@ -83,6 +86,8 @@ string Device::receiveMessage()
 	cout << "Recieved message: " << buffer << endl;
 
 	string appel = buffer;
+
+	close(sock);
 
 	return appel;
 }

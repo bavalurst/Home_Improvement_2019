@@ -58,6 +58,8 @@ void Control::compareDatabaseToDevice()
             {
             	//cout << "Sending: " << dat->readActuatorData(key) << "To Key: " << key << endl;
             	act->second->setValue(dat->readActuatorData(key));
+
+            	if(stoi(act->first) <= 26)
                 dev->second->sendMessage(act->second->getKey() + dat->readActuatorData(key));
             }
         }

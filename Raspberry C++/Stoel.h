@@ -19,8 +19,9 @@ private:
 	Sensor* s2;
 
 	time_t timeStart;
-	time_t alarm = 0;
-	time_t cooldown = 0;
+	time_t alarm = NULL;
+	time_t cooldown = NULL;
+	time_t switchTimer = NULL;
 	int seizureAlert = 0;
 	int previousPressure = 0;
 	int currentPressure = 0;

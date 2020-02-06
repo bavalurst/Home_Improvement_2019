@@ -66,16 +66,18 @@ string Stoel::logic(map<string, Device*> dev)
 
 	if((s2->getValue() == "1" || a3->getValue() == "1") && cooldown != NULL) {
 
-		s = s + "33;1;40;0"; //als hij aan wilt worden gezet terwijl de cooldown nog actief is
+		s = s + "33;1;"; //als hij aan wilt worden gezet terwijl de cooldown nog actief is
 	}
 
 	/*if((s2->getValue() == "0" || a3->getValue() == "0") && alarm != NULL) {
 		cooldown
 	}*/
 
-	if(((s2->getValue() == "1" || a3->getValue() == "0") && alarm != NULL) || (timeStart > alarm && alarm != NULL)){ //Massage functie beindigen na 5 seconden
+	if(timeStart > alarm && alarm != NULL){ //Massage functie beindigen na 5 seconden
 		alarm = NULL;
 		s = s + "4;0;";
+
+		cout << endl << endl << "IK ZET STOEL NU UIT LOL" << endl << endl;
 		cooldown = timeStart + 5; //tijdsduur van de cooldown bepalen.
 		//cout << "Massage ended \n";
 	}
@@ -121,6 +123,17 @@ string Stoel::logic(map<string, Device*> dev)
 	else if (seizureTime > 10) { // alles resetten na 10 seconde.
 		seizureTime = 0;
 		seizureLevel = 0;
+	}
+
+	if(a3->getValue() == "1" && switchTimer == NULL) {
+		switchTimer = timeStart + 1;
+		cout << endl << "SWITCHTIMER IS AANGEZET" << endl;
+	}
+
+	if(timeStart > switchTimer && a3->getValue() == "1") {
+		s = s + "40;0;";
+		switchTimer = NULL;
+		cout << endl << "SWITCHTIMER IS UITGEZET" << endl;
 	}
 
 	return s; //geef nieuwe actuator waarden door.
